@@ -3,5 +3,7 @@
 Programming with Python🐍
 
 week1：Introduction to Programming in Python
+
 week2：Psuedocode
+
 week3：Flowchart
