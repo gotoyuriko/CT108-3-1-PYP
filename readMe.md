@@ -8,4 +8,6 @@ week2：Psuedocode
 
 week3：Flowchart
 
+week4: Array
+
 
