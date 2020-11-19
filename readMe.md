@@ -8,6 +8,8 @@ week2：Psuedocode
 
 week3：Flowchart
 
-week4: Array
+week4：Array
+
+week5：Programming with Python
 
 
