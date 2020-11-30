@@ -10,6 +10,6 @@ i = 0
 while i < 4:
     if (zone == (i+1)):
         t = weight * shipping_charges[i]
-    i+=1
+    i += 1
 
-print("Total charges: ", str("%.2f" % t))
+print("Total charges: ", str("%.2f"))
