@@ -49,9 +49,11 @@ def admin_function():
             print("\n", choice, "is not a number")
             continue
 
+# uncompete
+
 
 def admin_add():
-    print("\ta. Coach")
+    print("\n\ta. Coach")
     print("\tb. Sport")
     print("\tc. Sport Schedule")
     choice = input("Choose one：")
@@ -66,16 +68,63 @@ def admin_add():
 
 
 def admin_display():
-    pass
+    print("\n\ta. Coach")
+    print("\tb. Sport")
+    print("\tc. Registered Students")
+    choice = input("Choose one：")
+    if choice == "a":
+        pass
+    elif choice == "b":
+        pass
+    elif choice == "c":
+        pass
+    else:
+        print("\nPlease Enter a, b or c")
 
 
 def admin_search():
-    pass
+    print("\n\ta. Coach by Coach ID")
+    print("\tb. Coach by overall performance (Rating)")
+    print("\tc. Sport by Sport ID")
+    print("\td. Student by Student ID")
+    choice = input("Choose one：")
+    if choice == "a":
+        pass
+    elif choice == "b":
+        pass
+    elif choice == "c":
+        pass
+    elif choice == "d":
+        pass
+    else:
+        print("\nPlease Enter a, b or c")
 
 
 def admin_sort():
-    pass
+    print("\n\ta. Coaches in ascending order by names.")
+    print("\tb. Coaches Hourly Pay Rate in ascending order")
+    print("\tc. Coaches Overall Performance in ascending order")
+    choice = input("Choose one：")
+    if choice == "a":
+        pass
+    elif choice == "b":
+        pass
+    elif choice == "c":
+        pass
+    else:
+        print("\nPlease Enter a, b or c")
 
 
 def admin_modify():
-    pass
+    print("\n\ta. Coach")
+    print("\tb. Sport")
+    print("\tc. Sport Schedule")
+    choice = input("Choose one：")
+    if choice == "a":
+        pass
+    elif choice == "b":
+        pass
+    elif choice == "c":
+        pass
+    else:
+        print("\nPlease Enter a, b or c")
