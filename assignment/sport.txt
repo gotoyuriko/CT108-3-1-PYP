@@ -1,0 +1,42 @@
+[
+  {
+    "Sport Code":"Cbxp",
+    "Sport Name":"Swimming"
+  },
+  {
+    "Sport Code":"yASh",
+    "Sport Name":"Badminton"
+  },
+  {
+    "Sport Code":"QrpI",
+    "Sport Name":"Football"
+  },
+  {
+    "Sport Code":"S6qp",
+    "Sport Name":"Archery"
+  },
+  {
+    "Sport Code":"DCLX",
+    "Sport Name":"Gymnastics"
+  },
+  {
+    "Sport Code":"k80d",
+    "Sport Name":"Volleyball"
+  },
+  {
+    "Sport Code":"Nyex",
+    "Sport Name":"Basketball"
+  },
+  {
+    "Sport Code":"0bpa",
+    "Sport Name":"Cricket"
+  },
+  {
+    "Sport Code":"PedA",
+    "Sport Name":"Tennis"
+  },
+  {
+    "Sport Code":"DBUj",
+    "Sport Name":"Table Tennis"
+  }
+]
