@@ -1,0 +1,6 @@
+David, TP830830, david@apu.edu.my
+John, TP899098, John@apu.edu.my
+Mary, TP567765, mary@apu.edu.my
+Ali, TP098778, Ali@apu.edu.my
+Sally, TP988076, sally@apu.edu.my
+Julia, TP899785, julia@apu.edu.my
