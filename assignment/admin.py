@@ -2,28 +2,26 @@ import json
 
 
 def admin_login():  # Login to Access System.
-    while True:
+    while 1:
         print("\n*** Admin Log In ***\n")
         print("Enter username and password")
         admin_username = input("User Name：")  # user name is 'yurikogoto5839'
         admin_password = input("Password：")  # password is 'iDpDZO871dAn'
 
-        adminf = open("admin_login.txt")
-        admin_data = adminf.read()
-        admin_dict = json.loads(admin_data)
+        with open("admin_login.txt") as adminf:
+            admin_data = adminf.read()
+            admin_dict = json.loads(admin_data)
 
-        if admin_username in admin_dict and admin_dict[admin_username] == admin_password:
-            admin_function()
-            break
-        else:
-            print("\nIncorrect username or password\n")
-
-        adminf.close()
+            if admin_username in admin_dict and admin_dict[admin_username] == admin_password:
+                admin_function()
+                break
+            else:
+                print("\nIncorrect username or password\n")
 
 
 def admin_function():  # after login
-    while True:
-        print("\n*** Admin login successful! ***\n")
+    while 1:
+        print("\n*** Admin Page ! ***\n")
         print("\t1. Add Record")
         print("\t2. Display All Records")
         print("\t3. Search Specific Record")
@@ -32,27 +30,27 @@ def admin_function():  # after login
         print("\t6. Exit")
 
         choice = input("\nEnter your choice: ")
-        try:
-            choice = int(choice)
-            if choice == 1:
-                admin_add()
-            elif choice == 2:
-                admin_display()
-            elif choice == 3:
-                admin_search()
-            elif choice == 4:
-                admin_sort()
-            elif choice == 5:
-                pass
-            elif choice == 6:
-                print("\nLog Out\n")
-                break
-            else:
-                print("\nPlease enter 1 to 6")
-                continue
-        except:
-            print("\n", choice, "is not a number")
+        # try:
+        choice = int(choice)
+        if choice == 1:
+            admin_add()
+        elif choice == 2:
+            admin_display()
+        elif choice == 3:
+            admin_search()
+        elif choice == 4:
+            admin_sort()
+        elif choice == 5:
+            admin_modify()
+        elif choice == 6:
+            print("\nLog Out\n")
+            break
+        else:
+            print("\nPlease enter 1 to 6")
             continue
+        # except:
+            # print("\n", choice, "is not a number")
+            # continue
 
 
 def admin_add():  # Add Record
@@ -60,13 +58,65 @@ def admin_add():  # Add Record
     print("\n\ta. Coach")
     print("\tb. Sport")
     print("\tc. Sport Schedule")
-    choose = input("Choose one：")
-    if choose == "a":
-        coachf = open("coach.txt")
-        coachf.close()
-    elif choose == "b":
+    choice = input("\nChoose one：")
+    if choice == "a":
+        coach = {}
+        print("\n\t*** Please Fill in your information below ***")
+        coach["Couach ID"] = input("\tCouach ID: ")
+        coach["Name"] = input("\tName: ")
+        coach["Date Joined"] = input("\tDate Joined: ")
+        coach["Date Terminated"] = input("\tDate Terminated: ")
+        coach["Horly Rate (RM/h)"] = input("\tHorly Rate (RM/h): ")
+        coach["Phone"] = input("\tPhone: ")
+        coach["Adress"] = input("\tAdress: ")
+
+        # Check Sport center code in this system
+        flag = 0
+        while flag == 0:
+            sport_center_code = input("\tSport Center Code: ")
+            with open("sport_center.txt") as sportcenterf:
+                sportcenter_data = sportcenterf.read()
+                sportcenter_list = json.loads(sportcenter_data)
+
+                for sportcenter in sportcenter_list:
+                    if sportcenter["Sport Center Code"] == sport_center_code:
+                        coach["Sport Center Code"] = sport_center_code
+                        coach["Sport Center Name"] = sportcenter["Sport Center Name"]
+                        flag = 1
+                        break
+            if flag == 1:
+                break
+            print("There is no", sport_center_code, "in this system")
+
+        # Check sport code in this system
+        flag = 0
+        while flag == 0:
+            sport_code = input("\tSport Code: ")
+            with open("sport.txt") as sportf:
+                sport_data = sportf.read()
+                sport_list = json.loads(sport_data)
+                for sport in sport_list:
+                    if sport["Sport Code"] == sport_code:
+                        coach["Sport Code"] = sport_code
+                        coach["Sport Name"] = sport["Sport Name"]
+                        flag = 1
+                        break
+            if flag == 1:
+                break
+            print("There is no", sport_code, "in this system")
+
+        # read coach files and append data
+        with open("coach.txt", "r") as coachf:
+            coach_data = coachf.read()
+            coach_dict = json.loads(coach_data)
+            coach_dict.append(coach)
+            encode_coach = json.dumps(coach_dict)
+        with open("coach.txt", "w") as coachf:
+            coachf.write(encode_coach)
+
+    elif choice == "b":
         pass
-    elif choose == "c":
+    elif choice == "c":
         pass
     else:
         print("\nPlease Enter a, b or c")
@@ -77,37 +127,39 @@ def admin_display():  # Display All Records
     print("\n\ta. Coach")
     print("\tb. Sport")
     print("\tc. Registered Students")
-    choose = input("\nChoose one：")
+    choice = input("\nChoose one：")
 
-    if choose == "a":  # Coach
-        coachf = open("coach.txt")
-        coach_data = coachf.read()
-        coach_dict = json.loads(coach_data)
+    if choice == "a":  # Coach
+        with open("coach.txt") as coachf:
+            coach_data = coachf.read()
+            coach_list = json.loads(coach_data)
 
-        print("\n*** Here are all records of coaches ***\n")
-        for coach in coach_dict:
-            print("\tCouach ID:", coach["Couach ID"])
-            print("\tName:", coach["Name"])
-            print("\tDate Joined:", coach["Date Joined"])
-            print("\tDate Terminated:", coach["Date Terminated"])
-            print("\tHorly Rate (RM/h):", coach["Horly Rate (RM/h)"])
-            print("\tSport Center Code:", coach["Sport Center Code"])
-            print("\tSport Center Name:", coach["Sport Center Name"])
-            print("\tSport Code:", coach["Sport Code"])
-            print("\tSport Name:", coach["Sport Name"])
-            print("\tRating:", coach["Rating"], "\n")
-        coachf.close()
-    elif choose == "b":  # Sport
+            print("\n*** Here are all records of coaches ***\n")
+            for coach in coach_list:
+                print("\tCouach ID:", coach["Couach ID"])
+                print("\tName:", coach["Name"])
+                print("\tDate Joined:", coach["Date Joined"])
+                print("\tDate Terminated:", coach["Date Terminated"])
+                print("\tHorly Rate (RM/h):", coach["Horly Rate (RM/h)"])
+                print("\tPhone:", coach["Phone"])
+                print("\tAdress", coach["Adress"])
+                print("\tSport Center Code:", coach["Sport Center Code"])
+                print("\tSport Center Name:", coach["Sport Center Name"])
+                print("\tSport Code:", coach["Sport Code"])
+                print("\tSport Name:", coach["Sport Name"])
+                print("\tRating:", coach["Rating"], "\n")
+
+    elif choice == "b":  # Sport
         sportf = open("coach.txt")
         sport_data = sportf.read()
-        sport_dict = json.loads(sport_data)
+        sport_list = json.loads(sport_data)
 
         print("\n*** Here are all records of sports ***\n")
-        for coach in sport_dict:
+        for coach in sport_list:
             print("\tSport Code:", coach["Sport Code"])
             print("\tSport Name:", coach["Sport Name"], "\n")
         sportf.close()
-    elif choose == "c":  # Registered Students
+    elif choice == "c":  # Registered Students
         pass
     else:
         print("\nPlease Enter a, b or c")
