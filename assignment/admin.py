@@ -59,21 +59,23 @@ def admin_add():  # Add Record
     print("\tb. Sport")
     print("\tc. Sport Schedule")
     choice = input("\nChoose one：")
+
+    # coach
     if choice == "a":
         coach = {}
-        print("\n\t*** Please Fill in your information below ***")
-        coach["Couach ID"] = input("\tCouach ID: ")
-        coach["Name"] = input("\tName: ")
-        coach["Date Joined"] = input("\tDate Joined: ")
-        coach["Date Terminated"] = input("\tDate Terminated: ")
-        coach["Horly Rate (RM/h)"] = input("\tHorly Rate (RM/h): ")
-        coach["Phone"] = input("\tPhone: ")
-        coach["Adress"] = input("\tAdress: ")
+        print("\n*** Please Fill in your information below ***")
+        coach["Couach ID"] = input("Couach ID: ")
+        coach["Name"] = input("Name: ")
+        coach["Date Joined"] = input("Date Joined: ")
+        coach["Date Terminated"] = input("Date Terminated: ")
+        coach["Horly Rate (RM/h)"] = input("Horly Rate (RM/h): ")
+        coach["Phone"] = input("Phone: ")
+        coach["Adress"] = input("Adress: ")
 
         # Check Sport center code in this system
         flag = 0
         while flag == 0:
-            sport_center_code = input("\tSport Center Code: ")
+            sport_center_code = input("Sport Center Code: ")
             with open("sport_center.txt") as sportcenterf:
                 sportcenter_data = sportcenterf.read()
                 sportcenter_list = json.loads(sportcenter_data)
@@ -91,7 +93,7 @@ def admin_add():  # Add Record
         # Check sport code in this system
         flag = 0
         while flag == 0:
-            sport_code = input("\tSport Code: ")
+            sport_code = input("Sport Code: ")
             with open("sport.txt") as sportf:
                 sport_data = sportf.read()
                 sport_list = json.loads(sport_data)
@@ -108,14 +110,51 @@ def admin_add():  # Add Record
         # read coach files and append data
         with open("coach.txt", "r") as coachf:
             coach_data = coachf.read()
-            coach_dict = json.loads(coach_data)
-            coach_dict.append(coach)
-            encode_coach = json.dumps(coach_dict)
+            coach_list = json.loads(coach_data)
+            coach_list.append(coach)
+            encode_coach = json.dumps(coach_list)
         with open("coach.txt", "w") as coachf:
             coachf.write(encode_coach)
 
+        print("\n★★★Complete★★★")
+
+    # sport
     elif choice == "b":
-        pass
+        sport = {}
+
+        # read sport files and append data
+        with open("sport.txt", "r") as sportf:
+            sport_data = sportf.read()
+            sport_list = json.loads(sport_data)
+
+            flag = 0
+            while flag == 0:
+                print("\n*** Please Fill in your information below ***")
+                sport_code = input("Sport Code: ")
+                sport_name = input("Sport Name: ")
+                # Check if the sport.txt already had input or not
+                for sport in sport_list:
+                    if sport["Sport Code"] == sport_code or sport["Sport Name"] == sport_name:
+                        print(sport_code, "or", sport_name,
+                              "are already stored")
+                        flag = 0
+                        break
+                    else:
+                        flag = 1
+                if flag == 1:
+                    sport["Sport Code"] = sport_code
+                    sport["Sport Name"] = sport_name
+                    break
+
+        sport_list.append(sport)
+        encode_sport = json.dumps(sport_list)
+
+        with open("sport.txt", "w") as sportf:
+            sportf.write(encode_sport)
+
+        print("\n★★★Complete★★★")
+
+    # Scedule
     elif choice == "c":
         pass
     else:
@@ -150,15 +189,15 @@ def admin_display():  # Display All Records
                 print("\tRating:", coach["Rating"], "\n")
 
     elif choice == "b":  # Sport
-        sportf = open("coach.txt")
-        sport_data = sportf.read()
-        sport_list = json.loads(sport_data)
+        with open("sport.txt") as sportf:
+            sport_data = sportf.read()
+            sport_list = json.loads(sport_data)
 
-        print("\n*** Here are all records of sports ***\n")
-        for coach in sport_list:
-            print("\tSport Code:", coach["Sport Code"])
-            print("\tSport Name:", coach["Sport Name"], "\n")
-        sportf.close()
+            print("\n*** Here are all records of sports ***\n")
+            for coach in sport_list:
+                print("\tSport Code:", coach["Sport Code"])
+                print("\tSport Name:", coach["Sport Name"], "\n")
+
     elif choice == "c":  # Registered Students
         pass
     else:

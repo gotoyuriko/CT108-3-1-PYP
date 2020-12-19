@@ -20,3 +20,4 @@ week7：function calling
 
 week8: file hanling, string
 
+week9: list
