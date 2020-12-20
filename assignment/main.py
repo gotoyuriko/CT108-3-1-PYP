@@ -2,16 +2,13 @@ from admin import *
 from student_all import *
 from student_registered import *
 
-print("*** Welcome to REAL CHAMPION APORT ACADEMY! ***\n")
-print("\tWho are you?")
-print("\t1. Admin")
-print("\t2. All Students(Registered / Not-Registered)")
-print("\t3. Registered Student\n")
+print("\n*** Welcome to REAL CHAMPION APORT ACADEMY! ***\n")
+print("\tWho are you?\n\t1. Admin\n\t2. All Students(Registered / Not-Registered)\n\t3. Registered Student\n")
 
 while 1:
-    user = input("Enter the number: ")
+
     # try:
-    user = int(user)
+    user = int(input("\tEnter the number: "))
     if(user == 1):
         admin_login()
         break
@@ -28,4 +25,5 @@ while 1:
     #     print("\n", user, "is not a number\n")
     #     continue
 
-print("See You !!\n")
+print("\n*** Log Out ***")
+print("★★★ See You ★★★\n")
