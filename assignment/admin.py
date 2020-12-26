@@ -1,491 +1,278 @@
-import json
+import file_handle as f
 
 
 def admin_login():  # Login to Access System.
     continuey = "y"
     while continuey == "y":
-        print("\n*** Admin Log In ***\n")
-        print("\tEnter username and password")
+        print("\n*** Admin Log In ***\n\tEnter username and password")
         admin_username = input("\tUser Name：")
         admin_password = input("\tPassword：")
-
-        with open("admin_login.txt") as adminf:
-            admin_data = adminf.read()
-            admin_dict = json.loads(admin_data)
-
+        admin_dict = f.admin_login_read()
         if admin_username in admin_dict and admin_dict[admin_username] == admin_password:
-            admin_function()
-            break
+            return True
         else:
-            print("\n\tIncorrect username or password\n")
-
-        continuey = input("\tEnter 'y' to type username and password again: ")
-
-
-def admin_function():  # admin page
-    while 1:
-        print("\n*** Admin Page ! ***\n")
-        print("\t1. Add Record")
-        print("\t2. Display All Records")
-        print("\t3. Search Specific Record")
-        print("\t4. Sort and Display Record")
-        print("\t5. Modify Record")
-        print("\t6. Exit")
-
-        choice = input("\n\tEnter your choice: ")
-        # try:
-        choice = int(choice)
-        if choice == 1:
-            admin_add()
-        elif choice == 2:
-            admin_display()
-        elif choice == 3:
-            admin_search()
-        elif choice == 4:
-            admin_sort()
-        elif choice == 5:
-            admin_modify()
-        elif choice == 6:
-            break
-        else:
-            print("\n\tPlease enter 1 to 6")
-            continue
-        # except:
-            # print("\n", choice, "is not a number")
-            # continue
+            print("\n\tIncorrect username or password")
+        continuey = input(
+            "\n\tEnter 'y' to type username and password again: ")
 
 
 def admin_add():  # Add Record
     continuey = "y"
     while continuey == "y":
         print("====================================================")
-        print("\n\ta. Coach")
-        print("\tb. Sport")
-        print("\tc. Sport Schedule")
+        print("\n\ta. Coach\n\tb. Sport\n\tc. Sport Schedule")
         choice = input("\n\tEnter your choice: ")
-
-        # coach
         if choice == "a":
-            coach = {}
-            print("\n*** Please Fill in your information below ***\n")
-            coach["Couach ID"] = input("\tCouach ID: ")
-            coach["Name"] = input("\tName: ")
-            coach["Date Joined"] = input("\tDate Joined: ")
-            coach["Date Terminated"] = input("\tDate Terminated: ")
-            coach["Horly Rate (RM/h)"] = input("\tHorly Rate (RM/h): ")
-            coach["Phone"] = input("\tPhone: ")
-            coach["Adress"] = input("\tAdress: ")
-
-            # Check Sport center code in this system
-            flag = 0
-            while flag == 0:
-                sport_center_code = input("Sport Center Code: ")
-                with open("sport_center.txt") as sportcenterf:
-                    sportcenter_data = sportcenterf.read()
-                    sportcenter_list = json.loads(sportcenter_data)
-
-                for sportcenter in sportcenter_list:
-                    if sportcenter["Sport Center Code"] == sport_center_code:
-                        coach["Sport Center Code"] = sport_center_code
-                        coach["Sport Center Name"] = sportcenter["Sport Center Name"]
-                        flag = 1
-                        break
-
-                if flag == 1:
-                    break
-                print("There is no", sport_center_code, "in this system")
-
-            # Check sport code in this system
-            flag = 0
-            while flag == 0:
-                sport_code = input("Sport Code: ")
-                with open("sport.txt") as sportf:
-                    sport_data = sportf.read()
-                    sport_list = json.loads(sport_data)
-
-                for sport in sport_list:
-                    if sport["Sport Code"] == sport_code:
-                        coach["Sport Code"] = sport_code
-                        coach["Sport Name"] = sport["Sport Name"]
-                        flag = 1
-                        break
-
-                if flag == 1:
-                    break
-                print("There is no", sport_code, "in this system")
-
-            # read coach files and write data
-            with open("coach.txt", "r") as coachf:
-                coach_data = coachf.read()
-                coach_list = json.loads(coach_data)
-                coach_list.append(coach)
-                encode_coach = json.dumps(coach_list)
-            with open("coach.txt", "w") as coachf:
-                coachf.write(encode_coach)
-
-            print("\n\t★★★ Complete ★★★")
-
-        # sport
+            admin_add_a()
         elif choice == "b":
-            sport = {}
-
-            # read sport files and append data
-            with open("sport.txt", "r") as sportf:
-                sport_data = sportf.read()
-                sport_list = json.loads(sport_data)
-
-                flag = 0
-                while flag == 0:
-                    print("\n*** Please Fill in your information below ***\n")
-                    sport_code = input("\tSport Code: ")
-                    sport_name = input("\tSport Name: ")
-
-                    # Check if the sport.txt already had input or not
-                    for sport in sport_list:
-                        if sport["Sport Code"] == sport_code or sport["Sport Name"] == sport_name:
-                            print(sport_code, "or", sport_name,
-                                  "are already stored")
-                            flag = 0
-                            break
-                        else:
-                            flag = 1
-                    if flag == 1:
-                        sport["Sport Code"] = sport_code
-                        sport["Sport Name"] = sport_name
-                        break
-
-                sport_list.append(sport)
-                encode_sport = json.dumps(sport_list)
-
-            # write data into the file
-            with open("sport.txt", "w") as sportf:
-                sportf.write(encode_sport)
-
-            print("\n\t★★★Complete★★★")
-
+            admin_add_b()
         # Scedule
         elif choice == "c":
-            pass
-
+            admin_add_c()
         else:
-            print("\nPlease Enter a, b or c")
-
+            print("\n\tPlease Enter a, b or c")
         continuey = input("\n\tEnter 'y' to continue: ")
         if continuey != "y":
             break
+
+
+def admin_add_a():
+    coach = {}
+    print("\n*** Add Records of Coach ***")
+    print("\n\tPlease Fill in your information below")
+    coach["Couach ID"] = input("\n\tCouach ID: ")
+    coach["Name"] = input("\tName: ")
+    coach["Date Joined"] = input("\tDate Joined: ")
+    coach["Date Terminated"] = input("\tDate Terminated: ")
+    while 1:
+        try:
+            coach["Horly Rate (RM/h)"] = int(input("\tHorly Rate (RM/h): "))
+            break
+        except:
+            print("\tPlease Enter the number")
+    coach["Phone"] = input("\tPhone: ")
+    coach["Adress"] = input("\tAdress: ")
+
+    # Check whether the input of Sport center code exits or not
+    check_sport_center_code(coach)
+
+    # Check whether the input of sport code exits or not
+    check_sport_code(coach)
+
+    # read coach files
+    coach_list = f.coach_read()
+    coach_list.append(coach)
+
+    # write on coach files
+    f.coach_write(coach_list)
+
+    # print coach
+    print("\n\t★★★ Complete ★★★\n")
+    print_records(coach)
+
+
+def admin_add_b():
+    sport = {}
+    # read sport files
+    sport_list = f.sport_read()
+    while 1:
+        print("\n*** Add Records of Sport ***")
+        print("\n\tPlease Fill in your information below")
+        sport_code = input("\tSport Code: ")
+        sport_name = input("\tSport Name: ")
+
+        # Check if the sport.txt already had input or not
+        if sport_code_check2(sport_list, sport_code, sport_name):
+            continue
+        else:
+            sport["Sport Code"] = sport_code
+            sport["Sport Name"] = sport_name
+            break
+
+    sport_list.append(sport)
+
+    # write data into the file
+    f.sport_write(sport_list)
+
+    # print coach
+    print("\n\t★★★ Complete ★★★\n")
+    print_records(sport)
+
+
+def admin_add_c():
+    pass
 
 
 def admin_display():  # Display All Records
     continuey = "y"
     while continuey == "y":
         print("====================================================")
-        print("\n\ta. Coach")
-        print("\tb. Sport")
-        print("\tc. Registered Students")
+        print("\n\ta. Coach\n\tb. Sport\n\tc. Registered Students")
         choice = input("\n\tEnter your choice: ")
-
-        if choice == "a":  # Coach
-            with open("coach.txt") as coachf:
-                coach_data = coachf.read()
-                coach_list = json.loads(coach_data)
-
-            print("\n*** Here are all records of coaches ***\n")
-            for coach in coach_list:
-                for coach_info in coach:
-                    print("\t"+coach_info+": "+str(coach[coach_info]))
-                print()
-
-        elif choice == "b":  # Sport
-            with open("sport.txt") as sportf:
-                sport_data = sportf.read()
-                sport_list = json.loads(sport_data)
-
-            print("\n*** Here are all records of sports ***\n")
-            for sport in sport_list:
-                for sport_info in sport:
-                    print("\t"+sport_info+": "+str(sport[sport_info]))
-                print()
-
+        if choice == "a":
+            admin_display_a()
+        elif choice == "b":
+            admin_display_b()
         elif choice == "c":  # Registered Students
             pass
         else:
             print("\n\tPlease Enter a, b or c")
-
         continuey = input("\n\tEnter 'y' to continue: ")
         if continuey != "y":
             break
+
+
+def admin_display_a():
+    coach_list = f.coach_read()
+
+    print("\n*** Here are all records of coache ***\n")
+    for coach in coach_list:
+        print_records(coach)
+
+
+def admin_display_b():
+    sport_list = f.sport_read()
+
+    print("\n*** Here are all records of sport ***\n")
+    for sport in sport_list:
+        print_records(sport)
+
+
+def admin_display_c():
+    pass
 
 
 def admin_search():  # Search Specific Records of
     continuey = "y"
     while continuey == "y":
         print("====================================================")
-        print("\n\ta. Coach by Coach ID")
-        print("\tb. Coach by overall performance (Rating)")
-        print("\tc. Sport by Sport ID")
-        print("\td. Student by Student ID")
+        print("\n\ta. Coach by Coach ID\n\tb. Coach by overall performance (Rating)\n\tc. Sport by Sport ID\n\td. Student by Student ID")
         choice = input("\n\tEnter your choice: ")
-
-        # Coach by Coach ID
         if choice == "a":
-            with open("coach.txt") as coachf:
-                coach_data = coachf.read()
-                coach_list = json.loads(coach_data)
-
-            flag = 0
-            while flag == 0:
-                coach_id = input("\n\tEnter Coach ID: ")
-                for coach in coach_list:
-                    if coach_id == coach["Couach ID"]:
-                        print()
-                        for coach_info in coach:
-                            print("\t", coach_info, ":", coach[coach_info])
-                        flag = 1
-
-                if flag == 0:
-                    print("\n\tWe couldn't find " +
-                          coach_id+", please try again.")
-                if flag == 1:
-                    break
-
-        # Coach by overall performance (Rating)
+            admin_search_a()
         elif choice == "b":
-            with open("coach.txt") as coachf:
-                coach_data = coachf.read()
-                coach_list = json.loads(coach_data)
-
-            flag = 0
-            while flag == 0:
-                try:
-                    rating = int(
-                        input("\n\tEnter overall performance (Rating): "))
-                    for coach in coach_list:
-                        if rating == coach["Rating"]:
-                            print()
-                            for coach_info in coach:
-                                print("\t", coach_info,
-                                      ":", coach[coach_info])
-                            flag = 1
-
-                except:
-                    print("\n\tPlease Enter the Number.")
-                    continue
-
-                if flag == 0:
-                    print("\n\tWe couldn't find rating " +
-                          str(rating)+", please try again.")
-                if flag == 1:
-                    break
-
-        # Sport by Sport ID
+            admin_search_b()
         elif choice == "c":
-            with open("sport.txt") as sportf:
-                sport_data = sportf.read()
-                sport_list = json.loads(sport_data)
-
-            flag = 0
-            while flag == 0:
-                sport_id = input("\n\tEnter Sport ID: ")
-                for sport in sport_list:
-                    if sport_id == sport["Sport Code"]:
-                        print()
-                        for sport_info in sport:
-                            print("\t", sport_info, ":", sport[sport_info])
-                        flag = 1
-                if flag == 0:
-                    print("\n\tWe couldn't find " +
-                          sport_id+", please try again.")
-                if flag == 1:
-                    break
-
+            admin_search_c()
         elif choice == "d":
-            pass
+            admin_search_d()
         else:
-            print("\nPlease Enter a, b or c")
-
+            print("\n\tPlease Enter a, b or c")
         continuey = input("\n\tEnter 'y' to continue: ")
         if continuey != "y":
             break
+
+
+def admin_search_a():
+    coach_list = f.coach_read()
+    while 1:
+        coach_id = input("\n\tEnter Coach ID: ")
+        if search_print(coach_list, coach_id):
+            break
+
+
+def admin_search_b():
+    coach_list = f.coach_read()
+    while 1:
+        try:
+            rating = int(input("\n\tEnter overall performance (Rating): "))
+            if search_print(coach_list, rating):
+                break
+        except:
+            print("\n\tPlease Enter the Number.")
+            continue
+
+
+def admin_search_c():
+    sport_list = f.sport_read()
+    while 1:
+        sport_id = input("\n\tEnter Sport ID: ")
+        if search_print(sport_list, sport_id):
+            break
+
+
+def admin_search_d():
+    pass
 
 
 def admin_sort():  # Sort and Display Record
     continuey = "y"
     while continuey == "y":
         print("====================================================")
-        print("\n\ta. Coaches in ascending order by names.")
-        print("\tb. Coaches Hourly Pay Rate in ascending order")
-        print("\tc. Coaches Overall Performance in ascending order")
+        print("\n\ta. Coaches in ascending order by names.\n\tb. Coaches Hourly Pay Rate in ascending order\n\tc. Coaches Overall Performance in ascending order")
         choice = input("\n\tEnter your choice: ")
-
-        # Coaches in ascending order by names.
         if choice == "a":
-            with open("coach.txt") as coachf:
-                coach_data = coachf.read()
-                coach_list = json.loads(coach_data)
-
-            name_list = []
-            for coach in coach_list:
-                name_list.append(coach["Name"])
-
-            name_sorted = sorted(name_list)
-
-            for name in name_sorted:
-                for coach in coach_list:
-                    if name == coach["Name"]:
-                        print()
-                        for coach_info in coach:
-                            print("\t", coach_info, ":", coach[coach_info])
-
-        # Coaches Hourly Pay Rate in ascending order
+            admin_sort_a()
         elif choice == "b":
-            with open("coach.txt") as coachf:
-                coach_data = coachf.read()
-                coach_list = json.loads(coach_data)
-
-            hourlyrate_list = []
-            for coach in coach_list:
-                hourlyrate_list.append(coach["Horly Rate (RM/h)"])
-
-            hourlyrate_sorted = sorted(hourlyrate_list, reverse=True)
-
-            for hourlyrate in hourlyrate_sorted:
-                for coach in coach_list:
-                    if hourlyrate == coach["Horly Rate (RM/h)"]:
-                        print()
-                        for coach_info in coach:
-                            print("\t", coach_info, ":", coach[coach_info])
-
-        # Coaches Overall Performance in ascending order
+            admin_sort_b()
         elif choice == "c":
-            with open("coach.txt") as coachf:
-                coach_data = coachf.read()
-                coach_list = json.loads(coach_data)
-
-            rating_list = []
-            for coach in coach_list:
-                rating_list.append(coach["Rating"])
-
-            rating_sorted = sorted(rating_list, reverse=True)
-
-            for rating in rating_sorted:
-                for coach in coach_list:
-                    if rating == coach["Rating"]:
-                        print()
-                        for coach_info in coach:
-                            print("\t", coach_info, ":", coach[coach_info])
+            admin_sort_c()
         else:
             print("\nPlease Enter a, b or c")
-
         continuey = input("\n\tEnter 'y' to continue: ")
         if continuey != "y":
             break
+
+
+def admin_sort_a():
+    coach_list = f.coach_read()
+    name_list = []
+    for coach in coach_list:
+        name_list.append(coach["Name"])
+
+    name_sorted = sorted(name_list)
+
+    for name in name_sorted:
+        for coach in coach_list:
+            if name == coach["Name"]:
+                print_records(coach)
+
+
+def admin_sort_b():
+    coach_list = f.coach_read()
+
+    hourlyrate_list = []
+    for coach in coach_list:
+        hourlyrate_list.append(coach["Horly Rate (RM/h)"])
+
+    hourlyrate_sorted = sorted(hourlyrate_list, reverse=True)
+
+    for hourlyrate in hourlyrate_sorted:
+        for coach in coach_list:
+            if hourlyrate == coach["Horly Rate (RM/h)"]:
+                print_records(coach)
+
+
+def admin_sort_c():
+    coach_list = f.coach_read()
+
+    rating_list = []
+    for coach in coach_list:
+        rating_list.append(coach["Rating"])
+
+    rating_sorted = sorted(rating_list, reverse=True)
+
+    for rating in rating_sorted:
+        for coach in coach_list:
+            if rating == coach["Rating"]:
+                print_records(coach)
 
 
 def admin_modify():  # Modify Record
     continuey = "y"
     while continuey == "y":
         print("====================================================")
-        print("\n\ta. Coach")
-        print("\tb. Sport")
-        print("\tc. Sport Schedule")
+        print("\n\ta. Coach\n\tb. Sport\n\tc. Sport Schedule")
         choice = input("\n\tEnter your choice: ")
-
         # Coach
         if choice == "a":
-            coach_id = input("\n\tEnter Coach ID to modify: ")
-            with open("coach.txt") as coachf:
-                coach_data = coachf.read()
-                coach_list = json.loads(coach_data)
+            admin_modify_a()
 
-            for coach in coach_list:
-                if coach_id == coach["Couach ID"]:
-                    comtinue_modify = "m"
-                    while comtinue_modify == "m":
-                        print("\n\t*** Which record do you want to modify***\n?")
-                        print("\n\t1. Name")
-                        print("\n\t2. Date Joined")
-                        print("\n\t3. Date Terminated")
-                        print("\n\t4. Horly Rate (RM/h)")
-                        print("\n\t5. Phone")
-                        print("\n\t6. Adress")
-                        print("\n\t7. Sport Center")
-                        print("\n\t8. Sport")
-                        num = input("\n\tEnter your choice: ")
-                        try:
-                            num = int(num)
-                            if num == 1:
-                                coach["Name"] = input("Please Enter Name: ")
-                            elif num == 2:
-                                coach["Date Joined"] = input(
-                                    "Please Enter Date Joined: ")
-                            elif num == 3:
-                                coach["Date Terminated"] = input(
-                                    "Please Enter Date Terminated: ")
-                            elif num == 4:
-                                try:
-                                    coach["Horly Rate (RM/h)"] = int(input(
-                                        "Please Enter Horly Rate (RM/h): "))
-                                except:
-                                    print("Please Enter the number")
-                            elif num == 5:
-                                coach["Phone"] = input("Please Enter Phone: ")
-                            elif num == 6:
-                                coach["Adress"] = input(
-                                    "Please Enter Adress: ")
-                            elif num == 7:
-                                # Check Sport center code in this system
-                                flag = 0
-                                while flag == 0:
-                                    sport_center_code = input(
-                                        "Please Enter Sport Center Code: ")
-                                    with open("sport_center.txt") as sportcenterf:
-                                        sportcenter_data = sportcenterf.read()
-                                        sportcenter_list = json.loads(
-                                            sportcenter_data)
-
-                                    for sportcenter in sportcenter_list:
-                                        if sportcenter["Sport Center Code"] == sport_center_code:
-                                            coach["Sport Center Code"] = sport_center_code
-                                            coach["Sport Center Name"] = sportcenter["Sport Center Name"]
-                                            flag = 1
-                                            break
-
-                                    if flag == 1:
-                                        break
-                                    print("There is no",
-                                          sport_center_code, "in this system")
-
-                            elif num == 8:
-                                # Check sport code in this system
-                                flag = 0
-                                while flag == 0:
-                                    sport_code = input(
-                                        "Please Enter Sport Code: ")
-                                    with open("sport.txt") as sportf:
-                                        sport_data = sportf.read()
-                                        sport_list = json.loads(sport_data)
-
-                                    for sport in sport_list:
-                                        if sport["Sport Code"] == sport_code:
-                                            coach["Sport Code"] = sport_code
-                                            coach["Sport Name"] = sport["Sport Name"]
-                                            flag = 1
-                                            break
-
-                                    if flag == 1:
-                                        break
-                                    print("There is no", sport_code,
-                                          "in this system")
-                        except:
-                            print("Wrong Input")
-
-                        comtinue_modify = input(
-                            "\n\tEnter \'y\' to continue to modify: ")
-                else:
-                    print("\n\tThere is no " + coach_id + " in this sysmtem")
-
+        # Sport
         elif choice == "b":
-            pass
+            admin_modify_b()
+
+        # Sport Schedule
         elif choice == "c":
             pass
         else:
@@ -494,3 +281,126 @@ def admin_modify():  # Modify Record
         continuey = input("\n\tEnter 'y' to continue: ")
         if continuey != "y":
             break
+
+
+def admin_modify_a():
+    # read coach files
+    coach_list = f.coach_read()
+
+    while 1:
+        coach_id = input("\n\tEnter Coach ID to modify: ")
+        # check coach id
+        for coach in coach_list:
+            if coach_id == coach["Couach ID"]:
+                continue_modify = "m"
+                while continue_modify == "m":
+                    print("\n*** Which record do you want to modify?***\n")
+                    print("\t1. Name\n\t2. Date Joined\n\t3. Date Terminated\n\t4. Horly Rate (RM/h)\n\t5. Phone\n\t6. Adress\n\t7. Sport Center\n\t8. Sport")
+                    num = input("\n\tEnter your choice: ")
+                    try:
+                        num = int(num)
+                        if num == 1:
+                            coach["Name"] = input("\n\tPlease Enter Name: ")
+                        elif num == 2:
+                            coach["Date Joined"] = input(
+                                "\n\tPlease Enter Date Joined: ")
+                        elif num == 3:
+                            coach["Date Terminated"] = input(
+                                "\n\tPlease Enter Date Terminated: ")
+                        elif num == 4:
+                            try:
+                                coach["Horly Rate (RM/h)"] = int(
+                                    input("\n\tPlease Enter Horly Rate (RM/h): "))
+                            except:
+                                print("\n\tPlease Enter the number")
+                        elif num == 5:
+                            coach["Phone"] = input("\n\tPlease Enter Phone: ")
+                        elif num == 6:
+                            coach["Adress"] = input(
+                                "\n\tPlease Enter Adress: ")
+                        elif num == 7:
+                            # Check Sport center code in this system
+                            check_sport_center_code(coach)
+                        elif num == 8:
+                            # Check sport code in this system
+                            check_sport_code(coach)
+                    except:
+                        print("\n\tWrong Input")
+
+                continue_modify = input(
+                    "\n\tEnter \'m\' to continue to modify: ")
+
+                if continue_modify != "m":
+                    f.coach_txt_write(coach_list)
+                    print("\n\t★★★Complete★★★")
+                    print_records(coach)
+                    return
+
+        print("\n\tThere is no " + coach_id + " in this sysmtem")
+
+
+def admin_modify_b():
+    while 1:
+        sport_id = input("\n\tEnter Sport ID to modify: ")
+        sport_list = f.sport_txt_read()
+        for sport in sport_list:
+            # check coach id
+            if sport_id == sport["Sport Code"]:
+                sport["Sport Name"] = input("\n\tPlease Enter Sport Name: ")
+                f.sport_txt_write(sport_list)
+                print("\n\t★★★Complete★★★")
+                print_records(sport)
+
+        print("\n\tThere is no " + sport_id + " in this sysmtem")
+
+
+def print_records(dict_items):
+    for dict_key in dict_items:
+        print("\t"+str(dict_key)+": "+str(dict_items[dict_key]))
+    print()
+
+
+def check_sport_center_code(coach):
+    while 1:
+        sport_center_code = input("\tSport Center Code: ")
+        sport_center_list = f.sport_center_read()
+        for sportcenter in sport_center_list:
+            if sportcenter["Sport Center Code"] == sport_center_code:
+                coach["Sport Center Code"] = sport_center_code
+                coach["Sport Center Name"] = sportcenter["Sport Center Name"]
+                return
+
+        print("\n\tThere is no", sport_center_code, "in this system\n")
+
+
+def check_sport_code(coach):
+    while 1:
+        sport_code = input("\tSport Code: ")
+        sport_list = f.sport_read()
+        for sport in sport_list:
+            if sport["Sport Code"] == sport_code:
+                coach["Sport Code"] = sport_code
+                coach["Sport Name"] = sport["Sport Name"]
+                return
+
+        print("\n\tThere is no", sport_code, "in this system\n")
+
+
+def sport_code_check2(sport_list, sport_code, sport_name):
+    for sport in sport_list:
+        if sport["Sport Code"] == sport_code or sport["Sport Name"] == sport_name:
+            print("\n\t", sport_code, "or",
+                  sport_name, "are already stored")
+            return True
+
+    return False
+
+
+def search_print(list, search_key):
+    for dict in list:
+        if search_key == dict["Couach ID"]:
+            print("\t*** Here are the results ***\n")
+            print_records(dict)
+            return True
+    print("\n\tWe couldn't find " + search_key + ", please try again.")
+    return False
