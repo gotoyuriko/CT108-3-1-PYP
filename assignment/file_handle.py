@@ -45,9 +45,15 @@ def sport_write(sport_list):
         sportf.write(encode_sport)
 
 
-def student_login_read():
-    with open("student_login.txt") as studentf:
+def student_read():
+    with open("student.txt") as studentf:
         student_data = studentf.read()
-        student_dict = json.loads(student_data)
+        student_list = json.loads(student_data)
 
-    return student_dict
+    return student_list
+
+
+def student_write(student_list):
+    with open("student.txt", "w") as studentf:
+        encode_student = json.dumps(student_list)
+        studentf.write(encode_student)

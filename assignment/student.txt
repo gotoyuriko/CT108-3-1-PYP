@@ -1,0 +1,17 @@
+[
+  {
+  "Student ID" : "yurikogoto@gmail.com",
+  "Password"  : "wL8mpQ",
+  "Name" : "Yuriko Goto"
+  },
+  {
+    "Studnet ID": "ramusess@gmail.com",
+    "Password" :"j2snSc",
+    "Name" : "Ramusess Goto"
+  },
+  {
+    "Studnet ID": "salahdin@gmail.com",
+    "Password" :"u28kP3",
+    "Name" : "Salahdin Goto"
+  }
+]

@@ -50,7 +50,6 @@ def admin_add_a():
             print("\n\tPlease Enter the number")
     coach["Phone"] = input("\tPhone: ")
     coach["Adress"] = input("\tAdress: ")
-
     # Check whether the input of Sport center code exits or not
     while 1:
         sport_center_code = input("\tSport Center Code: ")
@@ -59,7 +58,6 @@ def admin_add_a():
         name_key = "Sport Center Name"
         if check_code(coach, sport_center_list, sport_center_code, code_key, name_key):
             break
-
     # Check whether the input of sport code exits or not
     while 1:
         sport_code = input("\tSport Code: ")
@@ -68,7 +66,6 @@ def admin_add_a():
         name_key = "Sport Name"
         if check_code(coach, sport_list, sport_code, code_key, name_key):
             break
-
     coach_list = f.coach_read()
     coach_list.append(coach)
     f.coach_write(coach_list)

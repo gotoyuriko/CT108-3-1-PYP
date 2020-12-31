@@ -35,27 +35,47 @@ if user == 1:
             # continue
 
 elif user == 2:
-    print("\n*** Student Menu ***\n\n\t1. View details of...\n\t2. If new student Register to Access other Details\n\t3. Exit")
-    while True:
+    while 1:
+        print("\n*** Student Menu ***\n\n\t1. View details of...\n\t2. If new student Register to Access other Details\n\t3. Exit")
         choice = input("\n\tEnter your choice: ")
-        try:
-            choice = int(choice)
-            if choice == 1:
-                st_a.view_details()
-            elif choice == 2:
-                st_a.student_signup()
-            elif choice == 3:
-                print("\n\tLog Out")
-                break
-            else:
-                print("\n\tPlease enter 1 to 3")
-                continue
-        except:
-            print("\n\t" + choice, "is not a number")
+        # try:
+        choice = int(choice)
+        if choice == 1:
+            st_a.view_details()
+        elif choice == 2:
+            st_a.student_signup()
+        elif choice == 3:
+            print("\n\tLog Out")
+            break
+        else:
+            print("\n\tPlease enter 1 to 3")
             continue
+        # except:
+        #     print("\n\t" + str(choice), "is not a number")
+        #     continue
 
 elif user == 3:
-    st_r.student_login()
+    if st_r.student_login():
+        while 1:
+            print("\n*** Resistered Student Menu ***\n\n\t1. View Detail of\n\t2. Modify Self Record\n\t3. Provide feedback and Star to Coach\n\t4. Exit")
+            choice = input("\n\tEnter your choice: ")
+            # try:
+            choice = int(choice)
+            if choice == 1:
+                st_r.view_detail_of()
+            elif choice == 2:
+                st_r.modify_selfrecord()
+            elif choice == 3:
+                st_r.feedback_star()
+            elif choice == 4:
+                print("\n*** Log Out ***")
+                break
+            else:
+                print("\n\tPlease enter 1 to 6")
+                continue
+            # except:
+            # print("\n\t", choice, "is not a number")
+            # continue
 
 else:
     print("\n\tPlease enter 1 ,2 or 3")
