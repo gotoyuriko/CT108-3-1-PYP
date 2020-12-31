@@ -1,5 +1,16 @@
 def student_login():
-    pass
+    continuey = "y"
+    while continuey == "y":
+        print("\n*** Admin Log In ***\n\tEnter username and password")
+        student_username = input("User Name：")
+        student_password = input("Password：")
+        student_dict = f.student_login_read()
+        if student_username in student_dict and student_dict[student_username] == student_password:
+            return True
+        else:
+            print("\nIncorrect username or password\n")
+        continuey = input(
+            "\n\tEnter 'y' to type username and password again: ")
 
 
 def registered_student():

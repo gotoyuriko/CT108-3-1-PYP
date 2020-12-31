@@ -43,3 +43,11 @@ def sport_write(sport_list):
     with open("sport.txt", "w") as sportf:
         encode_sport = json.dumps(sport_list)
         sportf.write(encode_sport)
+
+
+def student_login_read():
+    with open("student_login.txt") as studentf:
+        student_data = studentf.read()
+        student_dict = json.loads(student_data)
+
+    return student_dict

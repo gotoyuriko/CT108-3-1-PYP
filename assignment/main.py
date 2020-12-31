@@ -2,17 +2,15 @@ import admin as ad
 import student_all as st_a
 import student_registered as st_r
 
-print("\n*** Welcome to REAL CHAMPION APORT ACADEMY! ***\n")
-print("\tWho are you?\n\t1. Admin\n\t2. All Students(Registered / Not-Registered)\n\t3. Registered Student")
+print("\n*** Welcome to REAL CHAMPION APORT ACADEMY! ***\n\n\tWho are you?\n\t1. Admin\n\t2. All Students(Registered / Not-Registered)\n\t3. Registered Student")
 
-
+user = input("\n\tEnter the number: ")
 # try:
-user = int(input("\n\tEnter the number: "))
-if(user == 1):
+user = int(user)
+if user == 1:
     if ad.admin_login():
         while 1:
-            print("\n*** Admin Menu ***\n")
-            print("\t1. Add Record\n\t2. Display All Records\n\t3. Search Specific Record\n\t4. Sort and Display Record\n\t5. Modify Record\n\t6. Exit")
+            print("\n*** Admin Menu ***\n\n\t1. Add Record\n\t2. Display All Records\n\t3. Search Specific Record\n\t4. Sort and Display Record\n\t5. Modify Record\n\t6. Exit")
             choice = input("\n\tEnter your choice: ")
             # try:
             choice = int(choice)
@@ -33,13 +31,35 @@ if(user == 1):
                 print("\n\tPlease enter 1 to 6")
                 continue
             # except:
-                # print("\n\t", choice, "is not a number")
-                # continue
-elif(user == 2):
-    st_a.student_all()
-elif(user == 3):
-    st_r.student_login()
-else:
-    print("\nPlease enter 1 ,2 or 3\n")
+            # print("\n\t", choice, "is not a number")
+            # continue
 
-print("\n★★★ See You ★★★\n")
+elif user == 2:
+    print("\n*** Student Menu ***\n\n\t1. View details of...\n\t2. If new student Register to Access other Details\n\t3. Exit")
+    while True:
+        choice = input("\n\tEnter your choice: ")
+        try:
+            choice = int(choice)
+            if choice == 1:
+                st_a.view_details()
+            elif choice == 2:
+                st_a.student_signup()
+            elif choice == 3:
+                print("\n\tLog Out")
+                break
+            else:
+                print("\n\tPlease enter 1 to 3")
+                continue
+        except:
+            print("\n\t" + choice, "is not a number")
+            continue
+
+elif user == 3:
+    st_r.student_login()
+
+else:
+    print("\n\tPlease enter 1 ,2 or 3")
+# except:
+#     print("\n\t"+user, "is not a number")
+
+print("\n★★★ See You ★★★")
