@@ -1,4 +1,5 @@
 import file_handle as f
+import datetime as d
 
 
 def admin_login():  # Login to Access System.
@@ -83,11 +84,12 @@ def admin_add_b():
         sport_name = input("\tSport Name: ")
 
         # Check if the sport.txt already had input or not
-        if sport_code_check2(sport_list, sport_code, sport_name):
+        if check_sport_code(sport_list, sport_code, sport_name):
             continue
         else:
             sport["Sport Code"] = sport_code
             sport["Sport Name"] = sport_name
+            sport["Description"] = input("\tDescribe the sport: ")
             break
 
     sport_list.append(sport)
@@ -98,7 +100,28 @@ def admin_add_b():
 
 
 def admin_add_c():
-    pass
+    schedule = {}
+    schedule_list = f.schedule_read()
+    while 1:
+        print(
+            "\n*** Add Records of Schedule ***\n\n\tPlease Fill in your information below")
+        coach_id = input("\tCoach ID: ")
+        coach_list = f.coach_read()
+        for coach in coach_list:
+            if coach["Coach ID"] == coach_id:
+                date, start_time, end_time = date_time(coach)
+                schedule["Coach ID"] = coach["Coach ID"]
+                schedule["Sport Code"] = coach["Sport Code"]
+                schedule["Date"] = date
+                schedule["Start Time"] = start_time
+                schedule["End Time"] = end_time
+                schedule_list.append(schedule)
+                f.schedule_write(schedule_list)
+                print("\n\t★★★ Complete ★★★\n")
+                print_records(schedule)
+                return
+        print("\n\tWe cannot find "+coach_id+", please try again")
+        continue
 
 
 def admin_display():  # Display All Records
@@ -415,3 +438,55 @@ def modify_coach(num, coach):
                     break
     except:
         print("\n\tWrong Input")
+
+
+def date_time(coach):
+    while 1:
+        try:
+            year = int(input("\tYear: "))
+            month = int(input("\tMonth: "))
+            day = int(input("\tDay: "))
+            start_hour = int(input("\tStart Time (Hour): "))
+            start_minute = int(input("\tStart Time (Minute): "))
+            end_hour = int(input("\tEnd Time (Hour): "))
+            end_minute = int(input("\tEnd Time (Minute): "))
+
+            start = d.datetime(year, month, day, start_hour, start_minute)
+            end = d.datetime(year, month, day, end_hour, end_minute)
+
+            if(start < end) and date_comparison(coach, start):
+                date = d.datetime.strptime(
+                    str(start), '%Y-%m-%d %H:%M:%S').strftime('%Y/%m/%d')
+                start_time = d.datetime.strptime(
+                    str(start), '%Y-%m-%d %H:%M:%S').strftime('%H:%M')
+                end_time = d.datetime.strptime(
+                    str(end), '%Y-%m-%d %H:%M:%S').strftime('%H:%M')
+                return date, start_time, end_time
+            else:
+                print("\n\tYour Date and Time is not correct. Pleaset try again.")
+                continue
+
+        except:
+            print("\n\tWrong Input. Please try again.")
+            continue
+
+
+def date_comparison(coach, start):
+    # Coach Date Joined
+    date_joined = coach["Date Joined"]
+    jdatetime = d.datetime.strptime(date_joined, '%Y/%m/%d')
+    jdate = d.date(jdatetime.year, jdatetime.month, jdatetime.day)
+
+    # Coach Date Terminated
+    date_terminated = coach["Date Terminated"]
+    tdatetime = d.datetime.strptime(date_terminated, '%Y/%m/%d')
+    tdate = d.date(tdatetime.year, tdatetime.month, tdatetime.day)
+
+    # Schedule Date
+    sdatetime = d.datetime.strptime(str(start), '%Y-%m-%d %H:%M:%S')
+    sdate = d.date(sdatetime.year, sdatetime.month, sdatetime.day)
+
+    if sdate >= jdate and sdate <= tdate:
+        return True
+    else:
+        return False

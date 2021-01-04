@@ -13,10 +13,10 @@ from datetime import datetime as dt
 
 date = '2017/10/19 10:54:29'
 new_date = datetime.datetime.strptime(
-    date, '%Y/%m/%d %H:%M:%S').strftime('%Y/%m/%d')
+    date, '%Y-%m-%d %H:%M:%S').strftime('%Y/%m/%d')
 print(new_date)
 new_time = datetime.datetime.strptime(
-    date, '%Y/%m/%d %H:%M:%S').strftime('%H:%M')
+    date, '%Y-%m-%d %H:%M:%S').strftime('%H:%M')
 print(new_time)
 
 # date = '2017/10/19 10:54:29'

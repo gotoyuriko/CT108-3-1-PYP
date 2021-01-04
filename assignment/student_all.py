@@ -22,7 +22,7 @@ def view_details_a():
     sport_list = f.sport_read()
     for sport in sport_list:
         print("\tSport: "+str(sport["Sport Name"]))
-        print("\tDescription: "+str(sport["Description"]))
+        print("\t"+str(sport["Description"]))
         print()
 
 

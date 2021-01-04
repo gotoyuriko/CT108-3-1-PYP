@@ -71,3 +71,17 @@ def schedule_write(schedule_list):
     with open("schedule.txt", "w") as schedulef:
         encode_schedule = json.dumps(schedule_list)
         schedulef.write(encode_schedule)
+
+
+def rating_read():
+    with open("rating.txt") as ratingf:
+        rating_data = ratingf.read()
+        rating_list = json.loads(rating_data)
+
+    return rating_list
+
+
+def rating_write(rating_list):
+    with open("rating.txt", "w") as ratingf:
+        encode_rating = json.dumps(rating_list)
+        ratingf.write(encode_rating)

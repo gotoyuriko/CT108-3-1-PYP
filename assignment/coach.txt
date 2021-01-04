@@ -40,7 +40,7 @@
     "Sport Code": "QrpI", 
     "Sport Name": "Football", 
     "Rating": 4
-  },
+  }, 
   {
     "Coach ID": "CO3KJUZBNU", 
     "Name": "Miley Cyrus", 
@@ -69,4 +69,4 @@
     "Sport Name": "Tennis", 
     "Rating": 2
   }
-]
+  ]

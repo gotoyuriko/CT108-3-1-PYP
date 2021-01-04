@@ -14,5 +14,9 @@
   {
     "Sport Center Code":"SPUzaQMI",
     "Sport Center Name":"Adidas Sport Center"
+  },
+  {
+    "Sport Center Code":"SPn8Hk4D",
+    "Sport Center Name":"Asia Pacific Sport Center"
   }
 ]
