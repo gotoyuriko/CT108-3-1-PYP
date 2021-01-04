@@ -49,11 +49,8 @@ def view_details_a():
 
 
 def view_details_b(student_id):
-    student_list = f.student_read()
-    for student in student_list:
-        if student["Student ID"] == student_id:
-            print("\n*** View Detail of Self-Record ***\n")
-            read_selfrecord()
+    print("\n*** View Detail of Self-Record ***\n")
+    read_selfrecord(student_id)
 
 
 def view_details_c(student_id):
@@ -81,64 +78,91 @@ def view_details_c(student_id):
 def modify_selfrecord(student_id):
     print("\n*** Modify Records of Self-Record ***")
     student_list = f.student_read()
-    while 1:
-        continue_modify = "m"
-        while continue_modify == "m":
-            print("\n*** Which record do you want to modify? ***\n")
-            print("\t1. Student ID")
-            print("\t2. Password")
-            print("\t3. Your Name")
-            print("\t4. Select Coach")
-            num = input("\n\tEnter your choice: ")
-            if modify_coach(num, student_id, student_list):
-                continue
-            continue_modify = input("\n\tEnter \'m\' to continue to modify: ")
-
-            if continue_modify != "m":
-                f.coach_write(student_list)
-                print("\n\t★★★Complete★★★\n")
-                read_selfrecord()
-                return
-
-
-def feedback_star():
-    pass
-
-
-def modify_coach(num, student_id, student_list):
     for student in student_list:
         if student["Student ID"] == student_id:
-            try:
-                num = int(num)
-                if num == 1:
-                    student["Student ID"] = input(
-                        "\n\tPlease Enter your email: ")
-                elif num == 2:
-                    old_passowrd = input("\n\tPlease Enter the new Password: ")
-                    student_list = f.student_read()
-                    for student in student_list:
-                        if old_passowrd == student["Password"]:
-                            student["Password"] = input(
-                                "\n\tPlease Enter the new Password: ")
-                elif num == 3:
-                    student["Name"] = input("\n\tPlease Enter your name: ")
-                elif num == 4:
-                    st_a.select_coach(student)
-                    return
-            except:
-                print("\n\tWrong Input")
+            while 1:
+                continue_modify = "m"
+                while continue_modify == "m":
+                    print("\n\tWhich record do you want to modify?")
+                    print("\t1. Student ID")
+                    print("\t2. Password")
+                    print("\t3. Your Name")
+                    print("\t4. Select Coach")
+                    num = input("\n\tEnter your choice: ")
+                    modify_coach(num, student)
+                    continue_modify = input(
+                        "\n\tEnter \'m\' to continue to modify: ")
+
+                    if continue_modify != "m":
+                        f.student_write(student_list)
+                        for student in student_list:
+                            if student["Student ID"] == student_id:
+                                print("\n\t★★★Complete★★★\n")
+                                read_selfrecord(student_id)
+                                return
 
 
-def read_selfrecord():
+def feedback_star(student_id):
+    coach_id = ""
     student_list = f.student_read()
     for student in student_list:
-        print("\tYour Email: "+student["Student ID"])
-        print("\tYour Name: "+student["Name"])
-        coach_list = f.coach_read()
-        for coach in coach_list:
-            if coach["Coach ID"] == student["Coach ID"]:
-                print("\tCoach Name: "+coach["Name"])
-                print("\tSport Center: " + coach["Sport Center Name"])
-                print("\tSport: "+coach["Sport Name"])
-                print("\tSport Fees: " +
-                      str(coach["Horly Rate (RM/h)"])+"(RM/h)")
+        if student["Student ID"] == student_id:
+            coach_id = student["Coach ID"]
+    print("\n*** Please give us your feedback on your coach【"+coach_id+"】***\n")
+    print("1: \"very poor performance\" * * * 5: \"excellent performance\"")
+    rating = input("\tEnter the number")
+    while 1:
+        try:
+            coach_list = f.coach_read()
+            for coach in coach_list:
+                if coach["Coach ID"] == coach_id:
+                    old_rating = coach["Rating"]
+                    old_rating += rating
+                    print("*** Thank you !! ***")
+                    return
+        except:
+            print("wrong input")
+
+
+def modify_coach(num, student):
+    try:
+        num = int(num)
+        if num == 1:
+            student["Student ID"] = input(
+                "\n\tPlease Enter your email: ")
+            return
+        elif num == 2:
+            old_passowrd = input(
+                "\n\tPlease Enter the current Password: ")
+            student_list = f.student_read()
+            for student in student_list:
+                if old_passowrd == student["Password"]:
+                    student["Password"] = input(
+                        "\n\tPlease Enter the new Password: ")
+                    return
+            print("\n\tIncorrect Password")
+            return
+        elif num == 3:
+            student["Name"] = input("\n\tPlease Enter your name: ")
+            return
+        elif num == 4:
+            st_a.select_coach(student)
+            return
+    except:
+        print("\n\tWrong Input")
+
+
+def read_selfrecord(student_id):
+    student_list = f.student_read()
+    for student in student_list:
+        if student["Student ID"] == student_id:
+            print("\tYour Email: "+student["Student ID"])
+            print("\tYour Name: "+student["Name"])
+            coach_list = f.coach_read()
+            for coach in coach_list:
+                if coach["Coach ID"] == student["Coach ID"]:
+                    print("\tCoach Name: "+coach["Name"])
+                    print("\tSport Center: " + coach["Sport Center Name"])
+                    print("\tSport: "+coach["Sport Name"])
+                    print("\tSport Fees: " +
+                          str(coach["Horly Rate (RM/h)"])+"(RM/h)")

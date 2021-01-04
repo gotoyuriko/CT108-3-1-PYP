@@ -1,6 +1,6 @@
 [
   {
-    "Couach ID": "CO7E44076D", 
+    "Coach ID": "CO7E44076D", 
     "Name": "Lady Gaga", 
     "Date Joined": "2018/06/10", 
     "Date Terminated": "2020/12/03", 
@@ -14,7 +14,7 @@
     "Rating": 3
   }, 
   {
-    "Couach ID": "COABC4E6B3", 
+    "Coach ID": "COABC4E6B3", 
     "Name": "Justin Bieber", 
     "Date Joined": "2020/10/09", 
     "Date Terminated": "2021/07/17", 
@@ -28,7 +28,7 @@
     "Rating": 5
   }, 
   {
-    "Couach ID": "CO50B6F44A", 
+    "Coach ID": "CO50B6F44A", 
     "Name": "Katy Perry", 
     "Date Joined": "2019/10/27", 
     "Date Terminated": "2021/12/17", 
@@ -42,7 +42,7 @@
     "Rating": 4
   },
   {
-    "Couach ID": "CO3KJUZBNU", 
+    "Coach ID": "CO3KJUZBNU", 
     "Name": "Miley Cyrus", 
     "Date Joined": "2018/10/03", 
     "Date Terminated": "2022/11/03", 
@@ -56,7 +56,7 @@
     "Rating": 3
   }, 
   {
-    "Couach ID": "COBFX5MU88", 
+    "Coach ID": "COBFX5MU88", 
     "Name": "John Lenon", 
     "Date Joined": "2019/10/27", 
     "Date Terminated": "2023/08/11", 

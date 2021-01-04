@@ -1,5 +1,4 @@
 import file_handle as f
-import admin as a
 
 
 def view_details():
@@ -76,8 +75,8 @@ def select_coach(student):
                     student["Coach ID"] = coach["Coach ID"]
                     coach_name = coach["Name"]
                     return coach_name
-            print("The number is out of range")
+            print("\n\tThe number is out of range")
             continue
         except:
-            print("Please enter the number")
+            print("\n\tPlease enter the number")
             continue
