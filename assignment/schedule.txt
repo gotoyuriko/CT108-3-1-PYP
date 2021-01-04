@@ -29,7 +29,7 @@
   },
   {
     "Coach ID" : "COBFX5MU88",
-    "Sport Code" : "PedAß",
+    "Sport Code" : "PedA",
     "Date" : "2021/01/23",
     "Start Time" : "11:30",
     "End Time" : "12:30"

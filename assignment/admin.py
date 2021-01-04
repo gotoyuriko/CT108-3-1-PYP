@@ -332,7 +332,29 @@ def admin_modify_b():
 
 
 def admin_modify_c():
-    pass
+    print("\n*** Modify Record of Schedule ***")
+    while 1:
+        coach_id = input("\n\tEnter Coach ID to modify: ")
+        schedule_list = f.schedule_read()
+
+        for schedule in schedule_list:
+            # check coach id
+            if coach_id == schedule["Coach ID"]:
+                coach_list = f.coach_read()
+                for coach in coach_list:
+                    if coach["Coach ID"] == coach_id:
+                        date, start_time, end_time = date_time(coach)
+                        schedule["Date"] = date
+                        schedule["Start Time"] = start_time
+                        schedule["End Time"] = end_time
+                        break
+                f.schedule_write(schedule_list)
+                print("\n\t★★★Complete★★★")
+                print_records(schedule)
+                return
+
+        print("\n\tThere is no " + coach_id + " in this sysmtem")
+        continue
 
 
 def print_records(dict_items):
