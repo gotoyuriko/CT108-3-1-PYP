@@ -55,18 +55,19 @@ elif user == 2:
         #     continue
 
 elif user == 3:
-    if st_r.student_login():
+    success, id = st_r.student_login()
+    if success:
         while 1:
             print("\n*** Resistered Student Menu ***\n\n\t1. View Detail of\n\t2. Modify Self Record\n\t3. Provide feedback and Star to Coach\n\t4. Exit")
             choice = input("\n\tEnter your choice: ")
             # try:
             choice = int(choice)
             if choice == 1:
-                st_r.view_detail_of()
+                st_r.view_details(id)
             elif choice == 2:
-                st_r.modify_selfrecord()
+                st_r.modify_selfrecord(id)
             elif choice == 3:
-                st_r.feedback_star()
+                st_r.feedback_star(id)
             elif choice == 4:
                 print("\n*** Log Out ***")
                 break

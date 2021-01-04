@@ -1,17 +1,20 @@
 [
   {
-  "Student ID" : "yurikogoto@gmail.com",
-  "Password"  : "wL8mpQ",
-  "Name" : "Yuriko Goto"
-  },
+    "Student ID": "yurikogoto@gmail.com", 
+    "Password": "wL8mpQ", 
+    "Name": "Yuriko Goto",
+    "Coach ID" : "CO3KJUZBNU"
+  }, 
   {
-    "Studnet ID": "ramusess@gmail.com",
-    "Password" :"j2snSc",
-    "Name" : "Ramusess Goto"
-  },
+    "Student ID": "ramusess@gmail.com", 
+    "Password": "j2snSc", 
+    "Name": "Ramusess Goto",
+    "Coach ID" : "COABC4E6B3"
+  }, 
   {
-    "Studnet ID": "salahdin@gmail.com",
-    "Password" :"u28kP3",
-    "Name" : "Salahdin Goto"
+    "Student ID": "salahdin@gmail.com", 
+    "Password": "u28kP3", 
+    "Name": "Salahdin Goto",
+    "Coach ID" : "CO7E44076D"
   }
-]
+  ]

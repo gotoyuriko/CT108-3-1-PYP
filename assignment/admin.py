@@ -38,7 +38,7 @@ def admin_add():  # Add Record
 def admin_add_a():
     coach = {}
     print("\n*** Add Records of Coach ***\n\n\tPlease Fill in your information below")
-    coach["Couach ID"] = input("\n\tCouach ID: ")
+    coach["Coach ID"] = input("\n\tCoach ID: ")
     coach["Name"] = input("\tName: ")
     coach["Date Joined"] = input("\tDate Joined: ")
     coach["Date Terminated"] = input("\tDate Terminated: ")
@@ -111,7 +111,7 @@ def admin_display():  # Display All Records
         elif choice == "b":
             admin_display_b()
         elif choice == "c":  # Registered Students
-            pass
+            admin_display_c()
         else:
             print("\n\tPlease Enter a, b or c")
         continuey = input("\n\tEnter 'y' to continue: ")
@@ -136,7 +136,11 @@ def admin_display_b():
 
 
 def admin_display_c():
-    pass
+    student_list = f.student_read()
+
+    print("\n*** Here are all records of student ***\n")
+    for student in student_list:
+        print_records(student)
 
 
 def admin_search():  # Search Specific Records of
@@ -160,9 +164,9 @@ def admin_search():  # Search Specific Records of
 
 
 def admin_search_a():
-    print("\n*** Search Specific Records of Coach ID ***")
+    print("\n*** Search Specific Records of Coach by Coach ID ***")
     coach_list = f.coach_read()
-    dict_key = "Couach ID"
+    dict_key = "Coach ID"
     while 1:
         coach_id = input("\n\tEnter Coach ID: ")
         if search_print(coach_list, coach_id, dict_key):
@@ -170,7 +174,7 @@ def admin_search_a():
 
 
 def admin_search_b():
-    print("\n*** Search Specific Records of overall performance (Rating) ***")
+    print("\n*** Search Specific Records of Coach by overall performance (Rating) ***")
     coach_list = f.coach_read()
     dict_key = "Rating"
     while 1:
@@ -184,7 +188,7 @@ def admin_search_b():
 
 
 def admin_search_c():
-    print("\n*** Search Specific Records of Sport ID ***")
+    print("\n*** Search Specific Records of Sport by Sport ID ***")
     sport_list = f.sport_read()
     dict_key = "Sport Code"
     while 1:
@@ -194,7 +198,13 @@ def admin_search_c():
 
 
 def admin_search_d():
-    pass
+    print("\n*** Search Specific Records of Student by Student ID ***")
+    student_list = f.student_read()
+    dict_key = "Student ID"
+    while 1:
+        student_id = input("\n\tStudent ID: ")
+        if search_print(student_list, student_id, dict_key):
+            break
 
 
 def admin_sort():  # Sort and Display Record
@@ -262,7 +272,7 @@ def admin_modify_a():
         coach_id = input("\n\tEnter Coach ID to modify: ")
         # check coach id
         for coach in coach_list:
-            if coach_id == coach["Couach ID"]:
+            if coach_id == coach["Coach ID"]:
                 continue_modify = "m"
                 while continue_modify == "m":
                     print("\n*** Which record do you want to modify?***\n\n\t1. Name\n\t2. Date Joined\n\t3. Date Terminated\n\t4. Horly Rate (RM/h)\n\t5. Phone\n\t6. Adress\n\t7. Sport Center\n\t8. Sport")
@@ -319,7 +329,7 @@ def check_code(coach, list, code, code_key, name_key):
     return False
 
 
-def sport_code_check2(sport_list, sport_code, sport_name):
+def check_sport_code(sport_list, sport_code, sport_name):
     for sport in sport_list:
         if sport["Sport Code"] == sport_code or sport["Sport Name"] == sport_name:
             print("\n\t"+sport_code, "or", sport_name, " are already stored")

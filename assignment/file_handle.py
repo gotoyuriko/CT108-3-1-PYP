@@ -57,3 +57,17 @@ def student_write(student_list):
     with open("student.txt", "w") as studentf:
         encode_student = json.dumps(student_list)
         studentf.write(encode_student)
+
+
+def schedule_read():
+    with open("schedule.txt") as schedulef:
+        schedule_data = schedulef.read()
+        schedule_list = json.loads(schedule_data)
+
+    return schedule_list
+
+
+def schedule_write(schedule_list):
+    with open("schedule.txt", "w") as schedulef:
+        encode_schedule = json.dumps(schedule_list)
+        schedulef.write(encode_schedule)
