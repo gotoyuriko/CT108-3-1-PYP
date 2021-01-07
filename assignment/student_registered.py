@@ -18,7 +18,7 @@ def student_login():
             "\n\tEnter 'y' to type username and password again: ")
 
 
-def view_details(id):
+def view_details(student_id):
     continuey = "y"
     while continuey == "y":
         print("====================================================\n\n\t*** View Datail of ***\n\ta. Coach\n\tb. Self-Record\n\tc. Registered Sport Schedule")
@@ -26,9 +26,9 @@ def view_details(id):
         if choice == "a":
             view_details_a()
         elif choice == "b":
-            view_details_b(id)
+            view_details_b(student_id)
         elif choice == "c":
-            view_details_c(id)
+            view_details_c(student_id)
         else:
             print("\n\tPlease Enter a or b")
         continuey = input("\n\tEnter 'y' to continue: ")
@@ -81,12 +81,7 @@ def modify_selfrecord(student_id):
         if student["Student ID"] == student_id:
             continue_modify = "m"
             while continue_modify == "m":
-                print("\n*** Modify Records of Self-Record ***\n")
-                print("\n\tWhich record do you want to modify?")
-                print("\t1. Your Email")
-                print("\t2. Password")
-                print("\t3. Your Name")
-                print("\t4. Select Coach")
+                print("\n*** Modify Records of Self-Record ***\n\n\tWhich record do you want to modify?\n\t1. Your Email\n\t2. Password\n\t3. Your Name\n\t4. Select Coach")
                 num = input("\n\tEnter your choice: ")
                 modify_coach(num, student)
                 continue_modify = input(

@@ -34,9 +34,9 @@ def view_details_b():
         for sport in sport_list:
             if schedule["Sport Code"] == sport["Sport Code"]:
                 print("\tSport: "+str(sport["Sport Name"]))
-        print("\tDate: "+str(schedule["Date"]))
-        print("\tStart Time: "+str(schedule["Start Time"]))
-        print("\tEnd Time: "+str(schedule["End Time"]))
+        print("\tDate: "+schedule["Date"])
+        print("\tStart Time: "+schedule["Start Time"])
+        print("\tEnd Time: "+schedule["End Time"])
         print()
 
 
@@ -49,11 +49,8 @@ def student_signup():
 
     coach_name = select_coach(student)
 
-    print("\n\t★★★ Complete ★★★\n")
-    print("\tYour Email: "+student["Student ID"])
-    print("\tPassword: "+student["Password"])
-    print("\tYour Name: "+student["Name"])
-    print("\tCoach Name: " + coach_name)
+    print("\n\t★★★ Complete ★★★\n\n\tYour Email: " + student["Student ID"]+"\n\tPassword: " +
+          student["Password"]+"\n\tYour Name: "+student["Name"]+"\n\tCoach Name: " + coach_name)
 
     student_list = f.student_read()
     student_list.append(student)
@@ -64,8 +61,8 @@ def select_coach(student):
     coach_list = f.coach_read()
     print("\n\tSelect Coach")
     for coach in coach_list:
-        print("\t"+str(coach_list.index(coach)+1) +
-              ": ", str(coach["Name"]), "("+str(coach["Sport Name"])+")")
+        print("\t"+str(coach_list.index(coach)+1) + ": ",
+              str(coach["Name"]), "("+str(coach["Sport Name"])+")")
     while 1:
         num = input("\n\tChoose a number: ")
         try:
