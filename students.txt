@@ -1,6 +1,0 @@
-John Doe,TP830830,john@apu.edu.my,889889
-Mary Ting,TP878878,mary@apu.edu.my,88hG12
-Ali Imran,TP098778,Ali@apu.edu.my,789456
-Salasiah S.,TP988076,sally@apu.edu.my,598789
-Julia Juremi,TP899785,julia.juremi@gmail.com,125125
-Jonathan James,TP830830,john.doe@apu.edu.my,ax568
