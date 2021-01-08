@@ -5,6 +5,7 @@ def view_details():
     continuey = "y"
     while continuey == "y":
         print("====================================================\n\n\t*** View Datail of ***\n\ta. Sport\n\tb. Sport Schedule")
+
         choice = input("\n\tEnter your choice: ")
         if choice == "a":
             view_details_a()
@@ -12,6 +13,7 @@ def view_details():
             view_details_b()
         else:
             print("\n\tPlease Enter a or b")
+
         continuey = input("\n\tEnter 'y' to continue: ")
         if continuey != "y":
             break
@@ -19,7 +21,9 @@ def view_details():
 
 def view_details_a():
     print("\n*** View Detail of Sport ***\n\n\t")
+
     sport_list = f.sport_read()
+
     for sport in sport_list:
         print("\tSport: "+str(sport["Sport Name"]))
         print("\t"+str(sport["Description"]))
@@ -28,8 +32,10 @@ def view_details_a():
 
 def view_details_b():
     print("\n*** View Detail of Sport Schedule ***\n\n\t")
+
     sport_list = f.sport_read()
     schedule_list = f.schedule_read()
+
     for schedule in schedule_list:
         for sport in sport_list:
             if schedule["Sport Code"] == sport["Sport Code"]:
@@ -43,6 +49,7 @@ def view_details_b():
 def student_signup():
     student = {}
     print("\n*** Student Sign Up ***")
+
     student["Student ID"] = input("\n\tEnter your email: ")
     student["Password"] = input("\tEnter your password: ")
     student["Name"] = input("\tEnter your name: ")
@@ -59,10 +66,12 @@ def student_signup():
 
 def select_coach(student):
     coach_list = f.coach_read()
+
     print("\n\tSelect Coach")
     for coach in coach_list:
         print("\t"+str(coach_list.index(coach)+1) + ": ",
               str(coach["Name"]), "("+str(coach["Sport Name"])+")")
+
     while 1:
         num = input("\n\tChoose a number: ")
         try:
