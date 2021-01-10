@@ -355,10 +355,10 @@ def admin_modify_a():  # modify coach
                 while continue_modify == "m":
                     print("\n*** Which record do you want to modify?***\n\n\t1. Name\n\t2. Date Joined and Date Terminated\n\t3. Horly Rate (RM/h)\n\t4. Phone\n\t5. Adress\n\t6. Sport Center\n\t7. Sport")
                     num = input("\n\tEnter your choice: ")
-                    if modify_coach(num, coach):
+                    if modify_coach(num, coach, coach_id):
                         continue
                     continue_modify = input(
-                        "\n\tEnter \'m\' : continue to modify, or any key: back ")
+                        "\n\tEnter \'m\' (continue to modify), or any key(back): ")
 
                     if continue_modify != "m":
                         f.coach_write(coach_list)
@@ -460,7 +460,7 @@ def sort_print(key_name):  # sort
                 break
 
 
-def modify_coach(num, coach):  # modify coaches
+def modify_coach(num, coach, coach_id):  # modify coaches
     try:
         num = int(num)
         if num == 1:
@@ -512,6 +512,14 @@ def modify_coach(num, coach):  # modify coaches
                     if sport_center["Sport Code"] == sport_code:
                         coach["Sport Code"] = sport_code
                         coach["Sport Name"] = sport_center["Sport Name"]
+
+                        # we need to change sport code in the schedule file
+                        schedule_list = f.schedule_read()
+                        for schedule in schedule_list:
+                            if schedule["Coach ID"] == coach_id:
+                                schedule["Sport Code"] = sport_code
+                                f.schedule_write(schedule_list)
+
                         flag = 1
                         break
                 if flag == 1:
