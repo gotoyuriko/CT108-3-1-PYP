@@ -69,7 +69,8 @@ def student_signup():
     student_list.append(student)
     f.student_write(student_list)
 
-    check_login = input("\n\tDo you want to login or go back to menu?")
+    print("\n\t1.Login\n\t2.Go back to menu")
+    check_login = input("\n\tDo you want to login or go back to menu?: ")
     try:
         check_login = int(check_login)
         if check_login == 1:
