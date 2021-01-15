@@ -35,13 +35,13 @@ def view_details(student_id):
         elif choice == "c":
             view_details_c(student_id)
         elif choice == "d":
-            break
+            return
         else:
             print("\n\tPlease Enter a ~ c")
 
         continuey = input("\n\tEnter 'y' to continue or any key to back: ")
         if continuey != "y":
-            break
+            return
 
 
 def view_details_a():
@@ -173,6 +173,7 @@ def feedback_star(student_id):
     count = 0
     actial_rating = 0
     rating_ave = 0
+    rating_int = 0
     feedback = {}
 
     rating_list = f.rating_read()
@@ -200,15 +201,17 @@ def feedback_star(student_id):
 
                         # Round float to integer
                         if rating_ave >= 1 and rating_ave < 1.5:
-                            rating["Rating"] = 1
+                            rating_int = 1
                         elif rating_ave >= 1.5 and rating_ave < 2.5:
-                            rating["Rating"] = 2
+                            rating_int = 2
                         elif rating_ave >= 2.5 and rating_ave < 3.5:
-                            rating["Rating"] = 3
+                            rating_int = 3
                         elif rating_ave >= 3.5 and rating_ave < 4.5:
-                            rating["Rating"] = 4
+                            rating_int = 4
                         elif rating_ave >= 4.5 and rating_ave <= 5.0:
-                            rating["Rating"] = 5
+                            rating_int = 5
+
+                        rating["Rating"] = rating_int
 
                         print("\t★★★ Thank you !! ★★★\n")
                         break
@@ -233,5 +236,5 @@ def feedback_star(student_id):
     # Update rating in the coach.txt file
     for coach in coach_list:
         if coach["Coach ID"] == coach_id:
-            coach["Rating"] = rating_ave
+            coach["Rating"] = rating_int
             f.coach_write(coach_list)

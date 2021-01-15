@@ -19,7 +19,7 @@ def view_details():
 
         continuey = input("\n\tEnter 'y' to continue or any key to back: ")
         if continuey != "y":
-            break
+            return
 
 
 def view_details_a():  # View Datail of Sport
@@ -68,19 +68,7 @@ def student_signup():
     student_list = f.student_read()
     student_list.append(student)
     f.student_write(student_list)
-
-    print("\n\t1.Login\n\t2.Go back to menu")
-    check_login = input("\n\tDo you want to login or go back to menu?: ")
-    try:
-        check_login = int(check_login)
-        if check_login == 1:
-            st_r.student_login()
-        elif check_login == 2:
-            return
-        else:
-            print("\n\tPlease enter the Number")
-    except:
-        print("\n\tPlease Enter the Number")
+    return
 
 
 def select_coach(student):
