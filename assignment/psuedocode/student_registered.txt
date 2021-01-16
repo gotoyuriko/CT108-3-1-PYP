@@ -1,0 +1,256 @@
+Function student_login
+  Pass in: nothing
+  SET continuey to "y"
+  DOWHILE continuey == "y"
+    PRINT "*** Student Log In ***"
+    PRINT "Enter your email and password"
+    READ student_username,student_password
+    SET student_list to call: student_read()
+    FOR  student in student_list
+      IF student_username == student["Student ID"] AND student_password == student["Password"] THEN
+        student_id = student["Student ID"]
+        Pass out: True, student_id
+      ENDIF
+      NEXT student
+    ENDFOR
+    PRINT "Incorrect username or password"
+    READ continuey
+  ENDDO
+Endfunction
+
+Function view_details
+  Pass in: student_id
+  SET continuey to "y"
+  DOWHILE continuey == "y"
+    PRINT "===================================================="
+    PRINT "*** View Datail of ***"
+    PRINT "a. Coach"
+    PRINT "b. Self-Record"
+    PRINT "c. Registered Sport Schedule"
+    PRINT "d. Exit"
+    READ choice
+    IF choice == "a" THEN
+      call: view_details_a()
+    ELSEIF choice == "b" THEN
+      call: view_details_b(student_id)
+    ELSEIF choice == "c" THEN
+      call: view_details_c(student_id)
+    ELSEIF choice == "d" THEN
+      Pass out: nothing
+    ELSE
+      PRINT "Please Enter a ~ d"
+    ENDIF
+    READ continuey
+  ENDDO
+Endfunction
+
+Function view_details_a
+  Pass in: nothing
+  PRINT "*** View Detail of Coach ***"
+  SET coach_list to call: coach_read()
+  FOR coach in coach_list
+    PRINT "Coach:",coach["Name"]
+    PRINT "Sport Center:",coach["Sport Center Name"]
+    PRINT "Sport:",coach["Sport Name"]
+    PRINT "Sport Fees:",coach["Horly Rate (RM/h)"],"(RM/h)"
+    PRINT "Overall performance (Rating): ", coach["Rating"]
+    PRINT ""
+    NEXT coach
+  ENDFOR
+  Pass out: nothing
+Endfunction
+
+Function view_details_b
+  Pass in: student_id
+  PRINT "*** View Detail of Self-Record ***"
+  SET student_list to call: student_read()
+  FOR student in student_list
+    IF student["Student ID"] == student_id THEN
+      PRINT "Your Email:",student["Student ID"]
+      PRINT "Your Name:",student["Name"]
+      SET coach_list to call: coach_read()
+      FOR coach in coach_list
+        IF coach["Coach ID"] == student["Coach ID"] THEN
+          PRINT "Coach Name:",coach["Name"]
+          PRINT "Sport Center:",coach["Sport Center Name"]
+          PRINT "Sport:", coach["Sport Name"]
+          PRINT "Sport Fees:",coach["Horly Rate (RM/h)"],"(RM/h)"
+        ENDIF
+        NEXT coach
+      ENDFOR
+    ENDIF
+    NEXT student
+  ENDFOR
+  Pass out: nothing
+Endfunction
+
+Function view_details_c
+  Pass in: student_id
+  SET coach_id to ""
+  SET coach_name to ""
+  SET student_list to student_read()
+  FOR student in student_list
+    IF  student["Student ID"] == student_id THEN
+      coach_id = student["Coach ID"]
+    ENDIF
+    NEXT student
+  ENDFOR
+  SET coach_list to coach_read()
+  FOR coach in coach_list
+    IF coach["Coach ID"] == coach_id
+      coach_name = coach["Name"]
+    ENDIF
+    NEXT coach
+  ENDFOR
+  SET schedule_list to call: schedule_read()
+  PRINT "*** The schedule of your Coach 【"+coach_name+" 】is Below ***"
+  FOR schedule in schedule_list
+    IF schedule["Coach ID"] == coach_id THEN
+      PRINT "Date:", schedule["Date"]
+      PRINT "Start Time:", schedule["Start Time"]
+      PRINT "End Time:", schedule["End Time"]
+      PRINT ""
+    ENDIF
+    NEXT schedule
+  ENDFOR
+  Pass out: nothing
+Endfunction
+
+Function modify_selfrecord
+  Pass in: student_id
+  SET student_list to call: student_read()
+  FOR student in student_list
+    IF student["Student ID"] == student_id THEN
+      SET continue_modify to "m"
+      SET coach_name to ""
+      DOWHILE continue_modify == "m"
+        PRINT "*** Modify Records of Self-Record ***"
+        PRINT "Which record do you want to modify?"
+        PRINT "1. Your Email"
+        PRINT "2. Password"
+        PRINT "3. Your Name"
+        PRINT "4. Select Coach"
+        PRINT "5. Exit"
+        READ num
+        TRY
+          num = int(num)
+          IF num == 1 THEN
+            READ student["Student ID"]
+          ELIF num == 2 THEN
+            READ old_passowrd
+            IF old_passowrd == student["Password"] THEN
+              READ student["Password"]
+            ELSE
+              PRINT "Incorrect Password"
+              CONTINUE
+            ENDIF
+          ELIF num == 3 THEN
+            READ student["Name"]
+          ELIF num == 4 THEN
+            READ coach_name
+          ELIF num == 5 THEN
+            BREAK
+          ELSE
+            PRINT "The number is out of range"
+            CONTINUE
+          ENDIF
+        EXCEPTION
+          PRINT "Wrong Input"
+          CONTINUE
+        ENDEXCEPTION
+        READ continue_modify
+      ENDDO
+      call: student_write(student_list)
+      PRINT "★★★Complete★★★"
+      PRINT "Your Email:",student["Student ID"]
+      PRINT "Your Name:",student["Name"]
+      PRINT "Coach Name:",coach_name
+      student_id = student["Student ID"]
+      Pass out: student_id
+    ENDIF
+    NEXT student
+  ENDFOR
+Endfunction
+
+Function feedback_star
+  Pass in: student_id
+  SET coach_id to ""
+  SET coach_name to ""
+  SET student_list to call: student_read()
+  FOR student in student_list
+    IF student["Student ID"] == student_id THEN
+      coach_id = student["Coach ID"]
+    ENDIF
+    NEXT student
+  ENDFOR
+  SET coach_list to call: coach_read()
+  FOR coach in coach_list
+    IF coach["Coach ID"] == coach_id THEN
+      coach_name = coach["Name"]
+    ENDIF
+    NEXT coach
+  ENDFOR
+  PRINT "*** Please give us your feedback on your coach【",coach_name,"】***"
+  PRINT "1: very poor performance 5: excellent performance"
+  SET count to 0
+  SET actial_rating to 0
+  SET rating_ave to 0
+  SET rating_int to 0
+  SET feedback to {}
+  SET rating_list to call: rating_read()
+  FOR rating in rating_list
+    IF rating["Coach ID"] == coach_id
+      feedback["Coach ID"] = rating["Coach ID"]
+      READ feedback["Description"]
+      count = rating["Count"]
+      actial_rating = rating["Actual Rating"]
+      DOWHILE 1
+        READ new_rating
+        TRY
+          new_rating = int(new_rating)
+          IF new_rating > 0 AND new_rating <= 5 THEN
+            total_num = actial_rating * count
+            total_num += new_rating
+            count += 1
+            rating_ave = total_num / count
+            IF rating_ave >= 1 AND rating_ave < 1.5 THEN
+              SET rating_int to 1
+            ELIF rating_ave >= 1.5 AND rating_ave < 2.5 THEN
+              SET rating_int to 2
+            ELIF rating_ave >= 2.5 AND rating_ave < 3.5 THEN
+              SET rating_int to 3
+            ELIF rating_ave >= 3.5 AND rating_ave < 4.5 THEN
+              SET rating_int to 4
+            ELIF rating_ave >= 4.5 AND rating_ave <= 5.0 THEN
+              SET rating_int to 5
+            ENDIF
+            SET rating["Rating"] to rating_int
+            PRINT "★★★ Thank you !! ★★★"
+            BREAK
+          ELSE 
+            PRINT "The number is out of range!!"
+            CONTINUE
+          ENDIF
+        EXCEPTION
+          PRINT "Wrong input"
+          CONTINUE
+        ENDEXCEPTION
+      ENDDO
+      rating["Count"] = count
+      rating["Actual Rating"] = rating_ave
+      call: rating_write(rating_list)
+    ENDIF
+    NEXT rating
+  ENDFOR
+  SET feedback_list to call: feedback_read()
+  feedback_list.append(feedback)
+  call: feedback_write(feedback_list)
+  FOR coach in coach_list
+    IF coach["Coach ID"] == coach_id THEN
+      coach["Rating"] = rating_int
+      call: coach_write(coach_list)
+    ENDIF
+    NEXT coach
+  ENDFOR
+  Pass out: nothing
+Endfunction

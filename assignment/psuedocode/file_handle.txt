@@ -1,0 +1,120 @@
+Function admin_login_read
+  Pass in: nothing 
+  SET adminf to OPENFILE "admin_login.txt" for READ
+  admin_data = adminf.read()
+  admin_dict = json.loads(admin_data)
+  CLOSEFILE "admin_login.txt"
+  Pass out: admin_dict
+Endfunction
+
+Function coach_read
+  Pass in: nothing 
+  SET coachf to OPENFILE "coach.txt" for READ
+  coach_data = coachf.read()
+  coach_list = json.loads(coach_data)
+  CLOSEFILE "coach.txt"
+  Pass out: coach_list
+Endfunction
+
+Function coach_write
+  Pass in: coach_list
+  SET coachf OPENFILE "coach.txt" for WRITE
+  encode_coach = json.dumps(coach_list)
+  FILEWRITE(encode_coach)
+  Pass out: nothing
+Endfunction
+
+Function sport_center_read
+  Pass in: nothing 
+  SET sportcenterf to OPENFILE "sport_center.txt" for READ
+  sport_center_data = sportcenterf.read()
+  sport_center_list = json.loads(sport_center_data)
+  CLOSEFILE "sport_center.txt"
+  Pass out: sport_center_list
+Endfunction
+
+Function sport_read
+  Pass in: nothing 
+  SET sportf to OPENFILE "sport.txt" for READ
+  sport_data = sportf.read()
+  sport_list = json.loads(sport_data)
+  CLOSEFILE "sport.txt"
+  Pass out: sport_list
+Endfunction
+
+Function sport_write
+  Pass in: sport_list
+  SET sportf OPENFILE "sport.txt" for WRITE
+  encode_sport = json.dumps(sport_list)
+  FILEWRITE(encode_sport)
+  Pass out: nothing
+Endfunction
+
+Function student_read
+  Pass in: nothing 
+  SET studentf to OPENFILE "student.txt" for READ
+  student_data = studentf.read()
+  student_list = json.loads(student_data)
+  CLOSEFILE "student.txt"
+  Pass out: student_list
+Endfunction
+
+Function student_write
+  Pass in: student_list
+  SET studentf OPENFILE "student.txt" for WRITE
+  encode_student = json.dumps(student_list)
+  FILEWRITE(encode_student)
+  Pass out: nothing
+Endfunction
+
+Function schedule_read
+  Pass in: nothing 
+  SET schedulef to OPENFILE "schedule.txt" for READ
+  schedule_data = schedulef.read()
+  schedule_list = json.loads(schedule_data)
+  CLOSEFILE "schedule.txt"
+  Pass out: schedule_list
+Endfunction
+
+Function schedule_write
+  Pass in: schedule_list
+  SET schedulef OPENFILE "schedule.txt" for WRITE
+  encode_schedule = json.dumps(schedule_lists)
+  FILEWRITE(encode_schedule)
+  Pass out: nothing
+Endfunction
+
+Function rating_read
+  Pass in: nothing 
+  SET ratingf to OPENFILE "rating.txt" for READ
+  rating_data = ratingf.read()
+  rating_list = json.loads(rating_data)
+  CLOSEFILE "rating.txt"
+  Pass out: rating_list
+Endfunction
+
+
+Function rating_write
+  Pass in: rating_list
+  SET ratingf OPENFILE "rating.txt" for WRITE
+  encode_rating = json.dumps(rating_list)
+  FILEWRITE(encode_rating)
+  Pass out: nothing
+Endfunction
+
+Function feedback_read
+  Pass in: nothing 
+  SET feedbackf to OPENFILE "feedback.txt" for READ
+  feedback_list = feedbackf.read()
+  feedback_list = json.loads(feedback_data)
+  CLOSEFILE "feedback.txt"
+  Pass out: feedback_list
+Endfunction
+
+Function feedback_write
+  Pass in: feedback_list
+  SET feedbackf OPENFILE "feedback.txt" for WRITE
+  encode_feedback = json.dumps(feedback_list)
+  FILEWRITE(encode_feedback)
+  Pass out: nothing
+Endfunction

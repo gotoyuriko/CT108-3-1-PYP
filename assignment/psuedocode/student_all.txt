@@ -1,0 +1,99 @@
+Function view_details
+  Pass in: nothing
+  SET continuey to "y"
+  DOWHILE continuey == "y"
+    PRINT "===================================================="
+    PRINT "*** View Detail of ***"
+    PRINT "a. Sport"
+    PRINT "b. Sport Schedule"
+    PRINT "c. Exit"
+    READ choice
+    IF choice == "a" THEN
+      call: view_details_a()
+    ELSEIF choice == "b" THEN
+      call: view_details_b()
+    ELSEIF choice == "c" THEN
+      Pass out: nothing
+    ELSE 
+      PRINT "Please Enter a ~ c"
+    ENDIF
+    READ continuey
+  ENDDO
+Endfunction
+
+Function view_details_a
+  Pass in: nothing
+  PRINT "*** View Detail of Sport ***"
+  SET sport_list to sport_read()
+  FOR sport in sport_list
+    PRINT "Sport: ", str(sport["Sport Name"])
+    PRINT str(sport["Description"])
+    PRINT ""
+    NEXT sport
+  ENDFOR
+  Pass out: nothing
+Endfunction
+
+Function view_details_b
+  Pass in: nothing
+  PRINT "*** View Detail of Sport ***"
+  SET sport_list to sport_read()
+  SET schedule_list to schedule_read()
+  FOR schedule in schedule_list
+    FOR sport in sport_list
+      IF schedule["Sport Code"] == sport["Sport Code"] THEN
+        PRINT "Sport:", sport["Sport Name"]
+      ENDIF
+      NEXT sport
+    ENDFOR
+    PRINT "Date:", schedule["Date"]
+    PRINT "Start Time:", schedule["Start Time"])
+    PRINT "End Time:",schedule["End Time"]
+    PRINT ""
+    NEXT schedule
+  ENDFOR
+  Pass out: nothing
+Endfunction
+
+Function student_signup
+  Pass in: nothing
+  SET student to {}
+  PRINT "*** Student Sign Up ***"
+  READ student["Student ID"],student["Password"],student["Name"]
+  SET coach_name to call: select_coach(student)
+  PRINT "★★★ Complete ★★★"
+  PRINT "Your Email: ", student["Student ID"]
+  PRINT "Your Name: ", student["Name"]
+  PRINT "Coach Name: ", coach_name
+  SET student_list to call: student_read()
+  student_list.append(student)
+  call: student_write(student_list)
+  Pass out: nothing
+Endfunction
+
+Function select_coach
+  Pass in: student
+  PRINT "Select Coach"
+  FOR coach in coach_list
+    PRINT (coach_list.index(coach)+1),":",coach["Name"],"(",coach["Sport Name"],")"
+    NEXT coach
+  ENDFOR
+  DOWHILE 1
+    READ num
+    TRY
+      num = int(num)
+      FOR coach in coach_list
+        IF num == (coach_list.index(coach)+1) THEN
+          student["Coach ID"] = coach["Coach ID"]
+          coach_name = coach["Name"]
+          Pass out: coach_name
+        ENDIF
+      ENDFOR
+      PRINT "The number is out of range"
+      CONTINUE
+    EXCEPTION
+      PRINT "Please enter the number"
+      CONTINUE
+    ENDEXCEPTION
+  ENDDO
+Endfunction
