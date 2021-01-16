@@ -1,3 +1,5 @@
+# YURIKO GOTO
+# TP061843
 import admin as ad
 import student_all as st_a
 import student_registered as st_r

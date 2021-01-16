@@ -225,8 +225,9 @@ def admin_display_d():
     for feedback in feedback_list:
         for coach in coach_list:
             if feedback["Coach ID"] == coach["Coach ID"]:
-                print("Coach Name:", coach["Coach ID"])
-                print("Feedback:", feedback["Description"])
+                print("\tCoach Name:", coach["Coach ID"])
+                print("\tFeedback:", feedback["Description"])
+                print("")
 
 
 def admin_search():  # Search Specific Records of
