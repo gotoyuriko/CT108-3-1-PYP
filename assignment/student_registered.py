@@ -37,11 +37,9 @@ def view_details(student_id):
         elif choice == "d":
             return
         else:
-            print("\n\tPlease Enter a ~ c")
+            print("\n\tPlease Enter a ~ d")
 
         continuey = input("\n\tEnter 'y' to continue or any key to back: ")
-        if continuey != "y":
-            return
 
 
 def view_details_a():
@@ -86,7 +84,8 @@ def view_details_c(student_id):
 
     coach_list = f.coach_read()
     for coach in coach_list:
-        coach_name = coach["Name"]
+        if coach["Coach ID"] == coach_id:
+            coach_name = coach["Name"]
 
     schedule_list = f.schedule_read()
     print("\n\t*** The schedule of your Coach 【"+coach_name+" 】is Below ***\n")
@@ -126,7 +125,7 @@ def modify_selfrecord(student_id):
                     elif num == 4:
                         coach_name = st_a.select_coach(student)
                     elif num == 5:
-                        return
+                        break
                     else:
                         print("The number is out of range")
                         continue

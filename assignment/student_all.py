@@ -1,11 +1,10 @@
 import file_handle as f
-import student_registered as st_r
 
 
 def view_details():
     continuey = "y"
     while continuey == "y":
-        print("====================================================\n\n\t*** View Datail of ***\n\ta. Sport\n\tb. Sport Schedule\n\tc. Exit")
+        print("====================================================\n\n\t*** View Detail of ***\n\ta. Sport\n\tb. Sport Schedule\n\tc. Exit")
 
         choice = input("\n\tEnter your choice: ")
         if choice == "a":
@@ -18,8 +17,6 @@ def view_details():
             print("\n\tPlease Enter a ~ c")
 
         continuey = input("\n\tEnter 'y' to continue or any key to back: ")
-        if continuey != "y":
-            return
 
 
 def view_details_a():  # View Datail of Sport

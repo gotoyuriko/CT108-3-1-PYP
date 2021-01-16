@@ -1,0 +1,724 @@
+Function admin_login
+  Pass in: nothing
+  SET continuey to "y"
+  DOWHILE Econtinuey == "y"
+    PRINT "*** Admin Log In ***"
+    PRINT "Enter username and password"
+    READ admin_usernames,admin_password
+    SET admin_dict to call: admin_login_read()
+    IF admin_username in admin_dict and admin_dict[admin_username] == admin_password THEN
+      Pass out: True
+    ELSE:
+      PRINT "Incorrect username or password"
+    ENDIF
+    READ continuey
+  ENDDO
+  Pass out: nothing
+Endfunction
+
+Function admin_add
+  Pass in: nothing
+  SET continuey to "y"
+  DOWHILE continuey == "y"
+    PRINT "===================================================="
+    PRINT "Add Records of"
+    PRINT "a. Coach"
+    PRINT "b. Sport"
+    PRINT "c. Sport Schedule"
+    PRINT "d. Exit"
+    READ choice
+    IF choice == "a" THEN
+      call: admin_add_a()
+    ELSEIF choice == "b" THEN
+      call: admin_add_b()
+    ELSEIF choice == "c" THEN
+      call: admin_add_c()
+    ELSEIF choice == "d" THEN
+      Pass out: nothing
+    ELSE 
+      PRINT "Please Enter a ~ d"
+    ENDIF
+    READ continuey
+  ENDDO
+Endfunction
+
+Function admin_add_a
+  Pass in: nothing
+  SET coach to {}
+  PRINT "*** Add Records of Coach ***"
+  PRINT "Please Fill in your information below"
+  READ coach["Coach ID"], coach["Name"]
+  call: check_date(coach)
+  DOWHILE 1
+    READ hourly_rate
+    TRY
+      hourly_rate = int(hourly_rate)
+      IF hourly_rate >= 100 and hourly_rate <= 500 THEN
+        coach["Horly Rate (RM/h)"] = hourly_rate
+        BREAK
+      ELSE
+        PRINT "Horly Rate should be 100(RM/h)-500RM(RM/h).Please try again."
+        CONTINUE
+      ENDIF
+    EXCEPTION
+      PRINT "Please Enter the number"
+      CONTINUE
+    ENDTRYEXCEPTION
+  ENDDO
+  READ coach["Phone"],coach["Adress"]
+  SET flag to 0
+  DOWHILE flag == 0
+    READ sport_center_code
+    SET sport_center_list to call: sport_center_read()
+    FOR sport_center in sport_center_list
+      IF sport_center["Sport Center Code"] == sport_center_code THEN
+        Ccoach["Sport Center Code"] = sport_center_code
+        Ccoach["Sport Center Name"] = sport_center["Sport Center Name"]
+        flag = 1
+      ENDIF
+      NEXT sport_center
+    ENDFOR
+    IF flag == 1 THEN
+      BREAK
+    ELSE
+     PRINT "There is no", sport_center_code, "in this system"
+     CONTINUE
+    ENDIF
+  ENDDO
+  SET flag to 0
+  DOWHILE flag == 0
+    READ sport_code
+    SET sport_list to call: sport_read()
+    FOR sport in sport_list
+      IF sport["Sport Code"] == sport_code THEN
+        Coach["Sport Code"] = sport_code
+        Coach["Sport Name"] = sport["Sport Name"]
+        flag = 1
+      ENDIF
+      NEXT sport
+    ENDFOR
+    IF flag == 1 THEN
+      BREAK
+    ELSE
+     PRINT "There is no", sport_code, "in this system"
+     CONTINUE
+    ENDIF
+  ENDDO
+  SET coach["Rating"] to 0
+  SET coach_list to call: coach_read()
+  coach_list.append(coach)
+  call: coach_write(coach_list)
+  PRINT "★★★ Complete ★★★"
+  call: print_records(coach)
+  Pass out: nothing
+Endfunction
+
+Function admin_add_b
+  Pass in: nothing
+  SET sport to {}
+  SET sport_list to sport_read()
+  SET flag to 0
+  DOWHILE flag == 0
+    PRINT "*** Add Records of Sport ***"
+    PRINT "Please Fill in the Sport Code and Sport Name"
+    READ sport_code,sport_name
+    FOR sport in sport_list
+      IF sport["Sport Code"] == sport_code or sport["Sport Name"] == sport_name THEN
+        PRINT sport_code, "or", sport_name, " are already stored"
+        flag = 1
+      ENDIF
+      NEXT sport
+    ENDFOR
+    IF flag == 1 THEN
+      CONTINUE
+    ELSE
+      sport["Sport Code"] = sport_code
+      sport["Sport Name"] = sport_name
+      READ sport["Description"]
+      sport_list.append(sport)
+      call: sport_write(sport_list)
+      PRINT "★★★ Complete ★★★"
+      call: print_records(sport)
+      BREAK
+    ENDIF
+  ENDDO
+  Pass out: nothing
+Endfunction
+
+Function admin_add_c
+  Pass in: nothing
+  SET schedule to {}
+  SET schedule_list to call schedule_read()
+  DOWHILE 1
+    PRINT "*** Add Records of Schedule ***"
+    PRINT "Please Enter the Coach ID to set up schedule"
+    READ coach_id
+    SET coach_list to call: coach_read()
+    FOR coach in coach_list
+      IF coach["Coach ID"] == coach_id THEN
+        SET date, start_time, end_time to call: date_time()
+        schedule["Coach ID"] = coach["Coach ID"]
+        schedule["Sport Code"] = coach["Sport Code"]
+        schedule["Date"] = date
+        schedule["Start Time"] = start_time
+        schedule["End Time"] = end_time
+        schedule_list.append(schedule)
+        call: schedule_write(schedule_list)
+        PRINT "★★★ Complete ★★★"
+        call: print_records(schedule)
+        Pass out: nothing
+      ENDIF
+      NEXT coach
+    ENDFOR
+    PRINT "We cannot find "+coach_id+", please try again"
+    CONTINUE
+  ENDDO
+Endfunction
+
+Function admin_display
+  Pass in: nothing
+  SET continuey to "y"
+  DOWHILE continuey == "y"
+    PRINT "===================================================="
+    PRINT "Add Records of"
+    PRINT "a. Coach"
+    PRINT "b. Sport"
+    PRINT "c. Registered Students"
+    PRINT "d. Coach FeedBack"
+    PRINT "e. Exit"
+    READ choice
+    IF choice == "a" THEN
+      call: admin_add_a()
+    ELSEIF choice == "b" THEN
+      call: admin_add_b()
+    ELSEIF choice == "c" THEN
+      call: admin_add_c()
+    ELSEIF choice == "d" THEN
+      call: admin_add_d()
+    ELSEIF choice == "e" THEN
+      Pass out: nothing
+    ELSE 
+      PRINT "Please Enter a ~ e"
+    ENDIF
+    READ continuey
+  ENDDO
+Endfunction
+
+Function admin_display_a
+  Pass in: nothing
+  SET coach_list to call: coach_read()
+  PRINT "*** Here are all records of coach ***"
+  FOR coach in coach_list
+    call: print_records(coach)
+    NEXT coach
+  ENDFOR
+  Pass out: nothing
+Endfunction
+
+Function admin_display_b
+  Pass in: nothing
+  SET sport_list to call: sport_read()
+  PRINT "*** Here are all records of sport ***"
+  FOR sport in sport_list
+    call: print_records(sport)
+    NEXT sport
+  ENDFOR
+  Pass out: nothing
+Endfunction
+
+Function admin_display_c
+  Pass in: nothing
+  SET student_list to call: student_read()
+  PRINT "*** Here are all records of student ***"
+  FOR student in student_list
+    call: print_records(student)
+    NEXT student
+  ENDFOR
+  Pass out: nothing
+Endfunction
+
+Function admin_display_d
+  Pass in: nothing
+  SET feedback_list to call: feedback_read()
+  SET coach_lists to call: coach_read()
+  PRINT "*** Here are all records of feedback ***"
+  FOR feedback in feedback_list
+    FOR coach in coach_list
+      IF feedback["Coach ID"] == coach["Coach ID"] THEN
+        PRINT "Coach Name:", coach["Coach ID"]
+        PRINT "Feedback:", feedback["Description"]
+      ENDIF
+      NEXT coach
+    ENDFOR
+    NEXT feedback
+  ENDFOR
+  Pass out: nothing
+Endfunction
+
+Function admin_search
+  Pass in: nothing
+  SET continuey to "y"
+  DOWHILE continuey == "y"
+    PRINT "===================================================="
+    PRINT "a. Coach by Coach ID"
+    PRINT "b. Coach by overall performance (Rating)"
+    PRINT "c. Sport by Sport ID"
+    PRINT "d. Student by Student IDs"
+    PRINT "e. Exit"
+    READ choice
+    IF choice == "a" THEN
+      call: admin_search_a()
+    ELSEIF choice == "b" THEN
+      call: admin_search_b()
+    ELSEIF choice == "c" THEN
+      call: admin_search_c()
+    ELSEIF choice == "d" THEN
+      call: admin_search_d()
+    ELSEIF choice == "e" THEN
+      Pass out: nothing
+    ELSE 
+      PRINT "Please Enter a ~ e"
+    ENDIF
+    READ continuey
+  ENDDO
+Endfunction
+
+Function admin_search_a
+  Pass in: nothing
+  PRINT "*** Search Specific Records of Coach by Coach ID ***"
+  SET coach_list to call: coach_read()
+  SET dict_key to "Coach ID"
+  DOWHILE 1
+    READ coach_id
+    IF search_print(coach_list, coach_id, dict_key) == True THEN
+      Pass out: nothing
+    ENDIF
+  ENDDO
+Endfunction
+
+Function admin_search_b
+  Pass in: nothing
+  PRINT "*** Search Specific Records of Coach by overall performance (Rating) ***"
+  SET coach_list to call: coach_read()
+  SET dict_key to "Rating"
+  DOWHILE 1
+    READ rating
+    TRY
+      rating = int(rating)
+      IF search_print(coach_list, rating, dict_key) == True THEN
+        Pass out: nothing
+      ENDIF
+    EXCEPTION
+      PRINT "Please Enter the Number."
+      CONTINUE
+    ENDEXCEPTION
+  ENDDO
+Endfunction
+
+Function admin_search_c
+  Pass in: nothing
+  PRINT "*** Search Specific Records of Sport by Sport ID ***"
+  SET sport_list to call: sport_read()
+  SET dict_key to "Sport Code"
+  DOWHILE 1
+    READ sport_id
+    IF search_print(coach_list, sport_id, dict_key) == True THEN
+      Pass out: nothing
+    ENDIF
+  ENDDO
+Endfunction
+
+Function admin_search_c
+  Pass in: nothing
+  PRINT "*** Search Specific Records of Student by Student ID ***"
+  SET student_list to call: student_read()
+  SET dict_key to "Student ID"
+  DOWHILE 1
+    READ student_id
+    IF search_print(coach_list, student_id, dict_key) == True THEN
+      Pass out: nothing
+    ENDIF
+  ENDDO
+Endfunction
+
+Function admin_sort
+  Pass in: nothing
+  SET continuey to "y"
+  DOWHILE continuey == "y"
+    PRINT "===================================================="
+    PRINT "a. Coaches in ascending order by names."
+    PRINT "b. Coaches Hourly Pay Rate in ascending order"
+    PRINT "c. Coaches Overall Performance in ascending order"
+    PRINT "d. Exit"
+    READ choice
+    IF choice == "a" THEN
+      call: admin_sort_a()
+    ELSEIF choice == "b" THEN
+      call: admin_sort_b()
+    ELSEIF choice == "c" THEN
+      call: admin_sort_c()
+    ELSEIF choice == "d" THEN
+      Pass out: nothing
+    ELSE 
+      PRINT "Please Enter a ~ d"
+    ENDIF
+    READ continuey
+  ENDDO
+Endfunction
+
+Function admin_sort_a
+  Pass in: nothing
+    SET key_name to "Name"
+    call: sort_print(key_name)
+  Pass out: nothing
+Endfunction
+
+Function admin_sort_b
+  Pass in: nothing
+    SET key_name to "Horly Rate (RM/h)"
+    call: sort_print(key_name)
+  Pass out: nothing
+Endfunction
+
+Function admin_sort_c
+  Pass in: nothing
+    SET key_name to "Rating"
+    call: sort_print(key_name)
+  Pass out: nothing
+Endfunction
+
+Function admin_modify
+  Pass in: nothing
+  SET continuey to "y"
+  DOWHILE continuey == "y"
+    PRINT "===================================================="
+    PRINT "a. Coach"
+    PRINT "b. Sport"
+    PRINT "c. Sport Schedule"
+    PRINT "d. Exit"
+    READ choice
+    IF choice == "a" THEN
+      call: admin_modify_a()
+    ELSEIF choice == "b" THEN
+      call: admin_modify_b()
+    ELSEIF choice == "c" THEN
+      call: admin_modify_c()
+    ELSEIF choice == "d" THEN
+      Pass out: nothing
+    ELSE 
+      PRINT "Please Enter a ~ d"
+    ENDIF
+    READ continuey
+  ENDDO
+Endfunction
+
+Function admin_modify_a
+  Pass in: nothing
+  PRINT "*** Modify Records of Coach ***"
+  SET coach_list to coach_read()
+  DOWHILE 1
+    READ coach_id
+    FOR coach in coach_list
+      IF coach_id == coach["Coach ID"] THEN
+        SET continue_modify to "m"
+        DOWHILE continue_modify == "m"
+          PRINT "*** Which record do you want to modify?***"
+          PRINT "1. Name"
+          PRINT "2. Date Joined and Date Terminated"
+          PRINT "3. Horly Rate (RM/h)"
+          PRINT "4. Phone"
+          PRINT "5. Adress"
+          PRINT "6. Sport Center"
+          PRINT "7. Sport"
+          READ nums
+          call: modify_coach(num, coach, coach_id)
+          READ continue_modify
+          IF continue_modify != "m" THEN
+            call: coach_write(coach_list)
+            PRINT "★★★Complete★★★"
+            call: print_records(coach)
+            Pass out: nothing
+          ENDIF
+        ENDDO
+      ENDIF
+      NEXT coach
+    ENDFOR
+    PRINT "There is no " , coach_id , " in this sysmtem"
+  ENDDO
+Endfunction
+
+Function admin_modify_b
+  Pass in: nothing
+  PRINT "*** Modify Record of Sport ***"
+  DOWHILE 1
+    READ sport_id
+    SET sport_list to call: sport_read()
+    FOR sport in sport_list
+      IF sport_id == sport["Sport Code"] THEN 
+        sport["Sport Name"] = input("\n\tPlease Enter Sport Name: ")THEN
+        call: sport_write(sport_list)
+        PRINT "★★★Complete★★★"
+        call: print_records(sport)
+        Pass out: nothing
+      ENDIF
+      NEXT sport
+    ENDFOR
+    PRINT "There is no " , sport_id , " in this sysmtem"
+  ENDDO
+Endfunction
+
+Function admin_modify_c
+  Pass in: nothing
+  DOWHILE 1
+    PRINT "Select Coach"
+    SET schedule_list to schedule_read()
+    FOR schedule in schedule_list
+      PRINT schedule_list.index(schedule)+1,": ", schedule["Coach ID"]
+      PRINT "Date:",schedule["Date"]
+      PRINT "Start Time:", schedule["Start Time"]
+      PRINT "End Time:", schedule["End Time"]
+      PRINT ""
+      NEXT schedule
+    ENDFOR
+    READ num
+    TRY
+      num = int(num)
+      FOR schedule in schedule_list
+        IF num == (schedule_list.index(schedule)+1) THEN
+          SET coach_list to call: coach_read()
+          FOR coach in coach_list
+            IF coach["Coach ID"] == schedule["Coach ID"] THEN
+              SET date, start_time, end_time to call: date_time(coach) THEN
+              schedule["Date"] = date
+              schedule["Start Tistart_time
+              schedule["End Time"] = end_time
+            ENDIF
+            NEXT coach
+          ENDFOR
+          call: schedule_write(schedule_list)
+          PRINT "★★★Complete★★★"
+          call: print_records(schedule)
+          Pass out: nothing
+        ENDIF
+        NEXT schedule
+      ENDFOR
+      PRINT "The number is out of range"
+      CONTINUE
+    EXCEPTION
+      PRINT "Please enter the number"
+      CONTINUE
+    ENDTRYEXCEPTION
+  ENDDO
+Endfunction
+
+Function print_records
+  Pass in: dict_items
+  FOR dict_key in dict_items
+    PRINT str(dict_key)+": "+str(dict_items[dict_key])
+    PRINT ""
+    NEXT dict_key
+  ENDFOR
+  Pass out: nothing
+Endfunction
+
+Function search_print
+  Pass in: list, search_key, dict_key
+  SET flag to 0
+  FOR dict in list
+    IF search_key == dict[dict_key] THEN
+      PRINT "*** Here are the results ***"
+      call: print_records(dict)
+      flag = 1
+    ENDIF
+    NEXT dicts
+  ENDFOR
+  IF flag == 1 THEN
+   Pass out: True
+  ENDIF
+  PRINT "We couldn't find " + str(search_key) + ", please try again."
+  Pass out: False
+Endfunction
+
+Function sort_print
+  Pass in: key_name
+  SET coach_list to coach_read
+  SET old_list to []
+  SET new_list to []
+  FOR coach in coach_list
+    old_list.append(coach[key_name])
+    NEXT coach
+  ENDFOR
+  DOWHILE old_list
+    tmp = old_list[0]
+    TRY
+      tmp = int(tmp)
+      FOR i in old_list
+        IF i > tmp THEN
+          tmp = i
+        ENDIF
+        NEXT i
+      ENDFOR
+    EXCEPTION
+      FOR i in old_list
+        IF i < tmp THEN
+          tmp = i
+        ENDIF
+        NEXT i
+      ENDFOR
+    ENDEXCEPTION
+    new_list.append(tmp)
+    old_list.remove(tmp)
+  ENDDO
+  PRINT "★★★ Here the results ★★★"
+  FOR sort_item in new_list
+    FOR coach in coach_list
+      IF sort_item == coach[key_name] THEN
+        call: print_records(coach)
+        BREAK
+      ENDIF
+      NEXT coach
+    ENDFOR
+    NEXT sort_item
+  ENDFOR
+  Pass out: nothing
+Endfunction
+
+Function modify_coach
+  Pass in: num, coach, coach_id
+  TRY
+    num = int(num)
+    IF num == 1 THEN
+      READ coach["Name"]
+    ELIF num == 2 THEN
+      call: check_date(coach)
+    ELIF num == 3 THEN
+      DOWHILE 1
+        READ hourly_rate
+        TRY
+          hourly_rate = int(hourly_rate)
+          IF hourly_rate >= 100 and hourly_rate <= 500 THEN
+            coach["Horly Rate (RM/h)"] = hourly_rate
+            BREAK
+          ELSE
+            PRINT "Horly Rate should be 100(RM/h)-500RM(RM/h).Please try again."
+            CONTINUE
+          ENDIF
+        EXCEPTION
+          PRINT "Please Enter the number"
+          CONTINUE
+        ENDEXCEPTION
+      ENDDO
+    ELIF num == 4 THEN
+      READ coach["Phone"]
+    ELIF num == 5 THEN
+      READ coach["Adress"]
+    ELIF num == 6 THEN
+      SET flag to 0
+      DOWHILE flag == 0
+        READ sport_center_code
+        SET sport_center_list to call: sport_center_read()
+        FOR sport_center in sport_center_list
+          IF sport_center["Sport Center Code"] == sport_center_code THEN
+            Coach["Sport Center Code"] = sport_center_code
+            Coach["Sport Center Name"] = sport_center["Sport Center Name"]
+            flag = 1
+          ENDIF
+          NEXT sport_center
+        ENDFOR
+        IF flag == 1 THEN
+          BREAK
+        ELSE
+          PRINT "There is no", sport_center_code, "in this system"
+          CONTINUE
+        ENDIF
+      ENDDO
+    ELIF num == 7 THEN
+      SET flag to 0
+      DOWHILE flag == 0
+        READ sport_code
+        SET sport_list to call: sport_read()
+        FOR sport in sport_list
+          IF sport["Sport Code"] == sport_code THEN
+            Coach["Sport Code"] = sport_code
+            Coach["Sport Name"] = sport["Sport Name"]
+            flag = 1
+          ENDIF
+          NEXT sport
+        ENDFOR
+        IF flag == 1 THEN
+          BREAK
+        ELSE
+          PRINT "There is no", sport_code, "in this system"
+          CONTINUE
+        ENDIF
+      ENDDO
+    ELSE 
+      "Please enter 1 ~ 7"
+    ENDIF
+  EXCEPTION
+    PRINT "Wrong Input"
+  ENDTRYEXCEPTION
+  Pass out: nothing
+Endfunction
+
+Function date_time
+  Pass in: coach
+  DOWHILE 1
+    TRY
+      READ year, month, day, start_hour, start_minute, end_hour, end_minute
+      start = d.datetime(year, month, day, start_hour, start_minute)
+      end = d.datetime(year, month, day, end_hour, end_minute)
+      IF (start < end) AND (date_comparison(coach, start) == True) THEN
+        date = d.datetime.strptime(str(start), '%Y-%m-%d %H:%M:%S').strftime('%Y/%m/%d')
+        start_time = d.datetime.strptime(str(start), '%Y-%m-%d %H:%M:%S').strftime('%H:%M')
+        end_time = d.datetime.strptime(str(end), '%Y-%m-%d %H:%M:%S').strftime('%H:%M')
+        Pass out: date, start_time, end_time
+      ELSE
+        PRINT "Your Date and Time is not correct. Pleaset try again."
+        CONTINUE
+      ENDIF
+    EXCEPTION
+      PRINT "Wrong Input. Please try again."
+      CONTINUE
+    ENDEXCEPTION
+  ENDDO
+Endfunction
+
+Function date_comparison
+  Pass in: coach, start
+  SET date_joined to coach["Date Joined"]
+  jdatetime = d.datetime.strptime(date_joined, '%Y/%m/%d')
+  jdate = d.date(jdatetime.year, jdatetime.month,jdatetime.day)
+  SET date_terminated to coach["Date Terminated"]
+  tdatetime = d.datetime.strptime(date_terminated, '%Y/%m/%d')
+  tdate = d.date(tdatetime.year, tdatetime.month,tdatetime.day)
+  sdatetime = d.datetime.strptime(str(start), '%Y-%m-%d %H:%M:%S')
+  sdate = d.date(sdatetime.year, sdatetime.month, sdatetime.day)
+  IF sdate >= jdate AND sdate <= tdate THEN
+    Pass out: True
+  ELSE
+    Pass out: False
+  ENDIF
+Endfunction
+
+Function check_date
+  Pass in: coach
+  DOWHILE 1
+    TRY 
+      READ joined_year,joined_month,joined_day,terminated_year,terminated_month,terminated_day
+      date_joined = d.date(joined_year, joined_month, joined_day)
+      date_terminated = d.date(terminated_year, terminated_month, terminated_day)
+      IF date_joined < date_terminated THEN
+        coach["Date Joined"] = d.datetime.strptime(str(date_joined), '%Y-%m-%d').strftime('%Y/%m/%d')
+        coach["Date Terminated"] = d.datetime.strptime(str(date_terminated), '%Y-%m-%d').strftime('%Y/%m/%d')
+        Pass out: nothing
+      ELSE
+        PRINT "Your Date is not correct. Pleaset try again."
+        CONTINUE
+      ENDIF
+    EXCEPTION
+      PRINT "Wrong Input. Please try again."
+      CONTINUE
+    ENDEXCEPTION
+  ENDDO
+Endfunction
