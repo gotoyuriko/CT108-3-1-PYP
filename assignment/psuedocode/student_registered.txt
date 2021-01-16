@@ -97,7 +97,7 @@ Function view_details_c
   ENDFOR
   SET coach_list to coach_read()
   FOR coach in coach_list
-    IF coach["Coach ID"] == coach_id
+    IF coach["Coach ID"] == coach_id THEN
       coach_name = coach["Name"]
     ENDIF
     NEXT coach
@@ -199,7 +199,7 @@ Function feedback_star
   SET feedback to {}
   SET rating_list to call: rating_read()
   FOR rating in rating_list
-    IF rating["Coach ID"] == coach_id
+    IF rating["Coach ID"] == coach_id THEN
       feedback["Coach ID"] = rating["Coach ID"]
       READ feedback["Description"]
       count = rating["Count"]

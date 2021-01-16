@@ -6,7 +6,7 @@ Function admin_login
     PRINT "Enter username and password"
     READ admin_usernames,admin_password
     SET admin_dict to call: admin_login_read()
-    IF admin_username in admin_dict and admin_dict[admin_username] == admin_password THEN
+    IF admin_username in admin_dict AND admin_dict[admin_username] == admin_password THEN
       Pass out: True
     ELSE:
       PRINT "Incorrect username or password"
@@ -53,7 +53,7 @@ Function admin_add_a
     READ hourly_rate
     TRY
       hourly_rate = int(hourly_rate)
-      IF hourly_rate >= 100 and hourly_rate <= 500 THEN
+      IF hourly_rate >= 100 AND hourly_rate <= 500 THEN
         coach["Horly Rate (RM/h)"] = hourly_rate
         BREAK
       ELSE
@@ -455,7 +455,7 @@ Function admin_modify_b
     SET sport_list to call: sport_read()
     FOR sport in sport_list
       IF sport_id == sport["Sport Code"] THEN 
-        sport["Sport Name"] = input("\n\tPlease Enter Sport Name: ")THEN
+        sport["Sport Name"] = input("\n\tPlease Enter Sport Name: ")
         call: sport_write(sport_list)
         PRINT "★★★Complete★★★"
         call: print_records(sport)
@@ -596,7 +596,7 @@ Function modify_coach
         READ hourly_rate
         TRY
           hourly_rate = int(hourly_rate)
-          IF hourly_rate >= 100 and hourly_rate <= 500 THEN
+          IF hourly_rate >= 100 AND hourly_rate <= 500 THEN
             coach["Horly Rate (RM/h)"] = hourly_rate
             BREAK
           ELSE

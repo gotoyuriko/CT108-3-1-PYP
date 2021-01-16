@@ -88,6 +88,7 @@ Function select_coach
           coach_name = coach["Name"]
           Pass out: coach_name
         ENDIF
+        NEXT coach
       ENDFOR
       PRINT "The number is out of range"
       CONTINUE
