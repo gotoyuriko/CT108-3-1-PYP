@@ -2,7 +2,7 @@ import file_handle as f
 import datetime as d
 
 
-def admin_login():  # Login to Access System.
+def admin_login():  # Admin Login System
     continuey = "y"
     while continuey == "y":
         print("\n*** Admin Log In ***\n\n\tEnter username and password")
@@ -53,7 +53,7 @@ def admin_add_a():  # Add Record of Coach
 
     # check whether Horly Rate (RM/h) is number or not
     while 1:
-        hourly_rate = (input("\tHorly Rate (RM/h): "))
+        hourly_rate = input("\tHorly Rate (RM/h): ")
         try:
             hourly_rate = int(hourly_rate)
             if hourly_rate >= 100 and hourly_rate <= 500:
